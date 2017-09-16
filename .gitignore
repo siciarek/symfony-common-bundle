@@ -1,3 +1,11 @@
+# Custom
+.idea
+composer.phar
+phpunit.phar
+composer.lock
+/temp
+/web
+
 # Cache and logs (Symfony2)
 /app/cache/*
 /app/logs/*

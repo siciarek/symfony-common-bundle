@@ -78,6 +78,21 @@ class UrlTest extends TestCase
         ];
     }
 
+    public static function gettersProvider()
+    {
+        return [
+            ['getScheme'],
+            ['getHost'],
+            ['getPort'],
+            ['getUser'],
+            ['getPass'],
+            ['getPath'],
+            ['getQuery'],
+            ['getFragment'],
+            ['getTld'],
+        ];
+    }
+
     /**
      * @dataProvider parseOkProvider
      */
@@ -130,31 +145,18 @@ class UrlTest extends TestCase
     /**
      * @expectedException \Siciarek\SymfonyCommonBundle\Services\Net\Exceptions\InvalidUrl
      * @expectedExceptionMessage Use parse() method first.
+     * @expectedExceptionCode 404
      */
     public function testExceptionGetData()
     {
         $this->srv->getData();
     }
 
-    public static function gettersProvider()
-    {
-        return [
-            ['getScheme'],
-            ['getHost'],
-            ['getPort'],
-            ['getUser'],
-            ['getPass'],
-            ['getPath'],
-            ['getQuery'],
-            ['getFragment'],
-            ['getTld'],
-        ];
-    }
-
     /**
      * @dataProvider gettersProvider
      * @expectedException \Siciarek\SymfonyCommonBundle\Services\Net\Exceptions\InvalidUrl
      * @expectedExceptionMessage Use parse() method first.
+     * @expectedExceptionCode 404
      */
     public function testExceptionGetters($method)
     {
@@ -164,6 +166,7 @@ class UrlTest extends TestCase
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Call to undefined method Siciarek\SymfonyCommonBundle\Services\Net\Url::getDummy
+     * @expectedExceptionCode 0
      */
     public function testExceptionNonexistingGetter()
     {
@@ -173,6 +176,7 @@ class UrlTest extends TestCase
     /**
      * @expectedException \Siciarek\SymfonyCommonBundle\Services\Net\Exceptions\InvalidUrl
      * @expectedExceptionMessage No dns record for given domain.
+     * @expectedExceptionCode 404
      */
     public function testExceptionGetDnsRecord()
     {

@@ -4,7 +4,9 @@ composer.phar
 phpunit.phar
 composer.lock
 /temp
+/vendor
 /web
+
 
 # Cache and logs (Symfony2)
 /app/cache/*

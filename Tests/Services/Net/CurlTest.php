@@ -9,6 +9,10 @@
 namespace Siciarek\SymfonyCommonBundle\Tests\Services\Net;
 
 use Siciarek\SymfonyCommonBundle\Services\Net\Curl;
+use Siciarek\SymfonyCommonBundle\Services\Net\CurlExec;
+use Siciarek\SymfonyCommonBundle\Services\Net\CurlExecInterface;
+use Siciarek\SymfonyCommonBundle\Services\Net\HeadersInterface;
+use Siciarek\SymfonyCommonBundle\Services\Net\RestInterface;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 
 class CurlTest extends TestCase
@@ -29,12 +33,10 @@ class CurlTest extends TestCase
         $expected = ['content', 'info', 'headers'];
         $this->assertEquals($actual, $expected);
 
-        $this->assertEquals(200, $result['info']['http_code']);
-
-        $url = 'http://siciarek.pl';
-        $result = $this->srv->get($url);
-
-        $this->assertRegExp('#^' . preg_quote($url) . '#', $result['info']['url']);
+        $this->assertTrue($result['content'][CURLOPT_HTTPGET]);
+        $this->assertFalse(isset($result['content'][CURLOPT_POST]));
+        $this->assertFalse(isset($result['content'][CURLOPT_PUT]));
+        $this->assertFalse(isset($result['content'][CURLOPT_CUSTOMREQUEST]) and $result['content'][CURLOPT_CUSTOMREQUEST] === RestInterface::METHOD_DELETE);
     }
 
     public function testPost()
@@ -46,7 +48,10 @@ class CurlTest extends TestCase
         $expected = ['content', 'info', 'headers'];
         $this->assertEquals($actual, $expected);
 
-        $this->assertEquals(201, $result['info']['http_code'], $result['content']);
+        $this->assertFalse(isset($result['content'][CURLOPT_HTTPGET]));
+        $this->assertTrue($result['content'][CURLOPT_POST]);
+        $this->assertFalse(isset($result['content'][CURLOPT_PUT]));
+        $this->assertFalse(isset($result['content'][CURLOPT_CUSTOMREQUEST]) and $result['content'][CURLOPT_CUSTOMREQUEST] === RestInterface::METHOD_DELETE);
     }
 
     public function testPut()
@@ -58,7 +63,10 @@ class CurlTest extends TestCase
         $expected = ['content', 'info', 'headers'];
         $this->assertEquals($actual, $expected);
 
-        $this->assertEquals(404, $result['info']['http_code'], $result['content']);
+        $this->assertFalse(isset($result['content'][CURLOPT_HTTPGET]));
+        $this->assertFalse(isset($result['content'][CURLOPT_POST]));
+        $this->assertTrue($result['content'][CURLOPT_PUT]);
+        $this->assertFalse(isset($result['content'][CURLOPT_CUSTOMREQUEST]) and $result['content'][CURLOPT_CUSTOMREQUEST] === RestInterface::METHOD_DELETE);
     }
 
     public function testDelete()
@@ -70,11 +78,34 @@ class CurlTest extends TestCase
         $expected = ['content', 'info', 'headers'];
         $this->assertEquals($actual, $expected);
 
-        $this->assertEquals(404, $result['info']['http_code'], $result['content']);
+        $this->assertFalse(isset($result['content'][CURLOPT_HTTPGET]));
+        $this->assertFalse(isset($result['content'][CURLOPT_POST]));
+        $this->assertFalse(isset($result['content'][CURLOPT_PUT]));
+        $this->assertTrue(isset($result['content'][CURLOPT_CUSTOMREQUEST]) and $result['content'][CURLOPT_CUSTOMREQUEST] === RestInterface::METHOD_DELETE);
     }
 
     public function setUp()
     {
+        $curlExecMock = $this->createMock(CurlExecInterface::class);
+        $curlExecMock
+            ->method('exec')
+            ->will($this->returnCallback(function (array $opts, HeadersInterface $obj) {
+                $url = $opts[CURLOPT_URL];
+
+                $content = $opts;
+                $info = [
+                    'url' => $url,
+                ];
+                $headers = $obj->getHeaders();
+
+                return [
+                    'content' => $content,
+                    'info' => $info,
+                    'headers' => $headers,
+                ];
+            }));
+
         $this->srv = new Curl();
+        $this->srv->setCurlExec($curlExecMock);
     }
 }

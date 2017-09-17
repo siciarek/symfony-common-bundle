@@ -24,11 +24,11 @@
     </testsuites>
 <!--
     <logging>
-        <log type="coverage-html" target="web/build/coverage" title="PHP Code Coverage"
+        <log type="coverage-html" target="build/coverage" title="PHP Code Coverage"
              charset="UTF-8" yui="true" highlight="true"
              lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="web/build/logs/clover.xml"/>
-        <log type="junit" target="web/build/logs/junit.xml" logIncompleteSkipped="false"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
     </logging>
 -->
     <filter>

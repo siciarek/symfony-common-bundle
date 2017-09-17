@@ -79,11 +79,11 @@ class Curl implements RestInterface, HeadersInterface
     }
 
     /**
-     * Sends http request with GET method
+     * Sends http GET request to given url
      *
      * @param $url
      * @param null $data
-     * @return array
+     * @return mixed
      */
     public function get($url, $data = null)
     {
@@ -105,11 +105,11 @@ class Curl implements RestInterface, HeadersInterface
     }
 
     /**
-     * Sends http request with POST method
+     * Sends http POST request to given url
      *
      * @param $url
      * @param null $data
-     * @return array
+     * @return mixed
      */
     public function post($url, $data = null)
     {
@@ -125,11 +125,11 @@ class Curl implements RestInterface, HeadersInterface
     }
 
     /**
-     * Sends http request with PUT method
+     * Sends http PUT request to given url
      *
      * @param $url
      * @param null $data
-     * @return array
+     * @return mixed
      */
     public function put($url, $data = null)
     {
@@ -150,11 +150,11 @@ class Curl implements RestInterface, HeadersInterface
     }
 
     /**
-     * Sends http request with DELETE method
+     * Sends http DELETE request to given url
      *
      * @param $url
      * @param null $data
-     * @return array
+     * @return mixed
      */
     public function delete($url, $data = null)
     {
@@ -162,7 +162,7 @@ class Curl implements RestInterface, HeadersInterface
 
         $opts = $this->opts;
 
-        $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+        $opts[CURLOPT_CUSTOMREQUEST] = RestInterface::METHOD_DELETE;
         $opts[CURLOPT_URL] = $url;
         $opts[CURLOPT_POSTFIELDS] = $data;
 

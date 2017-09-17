@@ -15,6 +15,12 @@ use Siciarek\SymfonyCommonBundle\Services\Net\HeadersInterface;
 use Siciarek\SymfonyCommonBundle\Services\Net\RestInterface;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 
+/**
+ * Class CurlTest
+ * @package Siciarek\SymfonyCommonBundle\Tests\Services\Net\
+ *
+ * @group curl
+ */
 class CurlTest extends TestCase
 {
     const MOCK_API_URL = 'https://jsonplaceholder.typicode.com/posts';

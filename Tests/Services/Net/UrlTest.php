@@ -11,6 +11,12 @@ namespace Siciarek\SymfonyCommonBundle\Tests\Services\Net;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Services\Net\Url;
 
+/**
+ * Class UrlTest
+ * @package Siciarek\SymfonyCommonBundle\Tests\Services\Net
+ *
+ * @group url
+ */
 class UrlTest extends TestCase
 {
     const SIMPLE_URL = 'http://google.com';

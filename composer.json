@@ -27,7 +27,6 @@
     "minimum-stability": "dev",
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^2.3",
-        "phpunit/phpunit": "^6.2",
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.3",
         "willdurand/faker-bundle": "^1.3"

@@ -3,4 +3,5 @@ services:
     scb.net_url:
         class: Siciarek\SymfonyCommonBundle\Services\Net\Url
 
-    Siciarek\SymfonyCommonBundle\Services\Net\Curl: ~
+    scb.net_curl:
+        class: Siciarek\SymfonyCommonBundle\Services\Net\Curl

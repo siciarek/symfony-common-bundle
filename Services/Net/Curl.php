@@ -9,13 +9,35 @@
 namespace Siciarek\SymfonyCommonBundle\Services\Net;
 
 
-class Curl implements RestInterface
+class Curl implements RestInterface, HeadersInterface
 {
     protected $opts = [];
     protected $defaultHeaders = [];
     protected $auth = CURLAUTH_ANY;
     protected $headers = [];
     protected $response = [];
+    /**
+     * @var CurlExecInterface
+     */
+    protected $curlExec;
+
+    /**
+     * Returns curl exec command class
+     *
+     * @return CurlExecInterface
+     */
+    public function getCurlExec() {
+        return $this->curlExec;
+    }
+
+    /**
+     * Sets curl exec command class
+     *
+     * @param CurlExecInterface $curlExec
+     */
+    public function setCurlExec(CurlExecInterface $curlExec) {
+        $this->curlExec = $curlExec;
+    }
 
     /**
      * Curl constructor.
@@ -34,7 +56,7 @@ class Curl implements RestInterface
             umask($umask);
         }
 
-        $cookies = $tempdir . DIRECTORY_SEPARATOR . $name;
+        $cookies = $tempdir.DIRECTORY_SEPARATOR.$name;
 
         $this->opts = [
             CURLOPT_HTTPHEADER => $this->defaultHeaders,
@@ -49,8 +71,17 @@ class Curl implements RestInterface
             CURLOPT_VERBOSE => $debug,
             CURLOPT_HEADERFUNCTION => [$this, 'headerFunction'],
         ];
+
+        $this->setCurlExec(new CurlExec());
     }
 
+    /**
+     * Sends http request with GET method
+     *
+     * @param $url
+     * @param null $data
+     * @return array
+     */
     public function get($url, $data = null)
     {
         $query = is_array($data) ? http_build_query($data) : $data;
@@ -70,6 +101,13 @@ class Curl implements RestInterface
         return $this->exec($opts);
     }
 
+    /**
+     * Sends http request with POST method
+     *
+     * @param $url
+     * @param null $data
+     * @return array
+     */
     public function post($url, $data = null)
     {
         $data = is_array($data) ? http_build_query($data) : $data;
@@ -83,6 +121,13 @@ class Curl implements RestInterface
         return $this->exec($opts);
     }
 
+    /**
+     * Sends http request with PUT method
+     *
+     * @param $url
+     * @param null $data
+     * @return array
+     */
     public function put($url, $data = null)
     {
         $fp = fopen('php://temp', 'w');
@@ -101,6 +146,13 @@ class Curl implements RestInterface
         return $this->exec($opts);
     }
 
+    /**
+     * Sends http request with DELETE method
+     *
+     * @param $url
+     * @param null $data
+     * @return array
+     */
     public function delete($url, $data = null)
     {
         $data = is_array($data) ? http_build_query($data) : $data;
@@ -119,7 +171,7 @@ class Curl implements RestInterface
      * @param $header
      * @return int
      */
-    protected function headerFunction($ch, $header)
+    public function headerFunction($ch, $header)
     {
         $match = [];
 
@@ -153,19 +205,6 @@ class Curl implements RestInterface
      */
     public function exec(array $opts)
     {
-        $ch = curl_init();
-        curl_setopt_array($ch, $opts);
-        $content = curl_exec($ch);
-        $info = curl_getinfo($ch);
-        $headers = $this->getHeaders();
-        curl_close($ch);
-
-        $this->response = [
-            'content' => $content,
-            'info' => $info,
-            'headers' => $headers,
-        ];
-
-        return $this->response;
+        return $this->getCurlExec()->exec($opts, $this);
     }
 }

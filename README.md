@@ -1,4 +1,4 @@
-# symfony-common-bundle
+# Symfony Common Bundle
 
 [![Build Status](https://www.travis-ci.org/siciarek/symfony-common-bundle.svg?branch=master)](https://www.travis-ci.org/siciarek/symfony-common-bundle)
 

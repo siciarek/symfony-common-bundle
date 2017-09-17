@@ -30,6 +30,11 @@ class CurlTest extends TestCase
         $this->assertEquals($actual, $expected);
 
         $this->assertEquals(200, $result['info']['http_code']);
+
+        $url = 'http://siciarek.pl';
+        $result = $this->srv->get($url);
+
+        $this->assertRegExp('#^' . preg_quote($url) . '#', $result['info']['url']);
     }
 
     public function testPost()

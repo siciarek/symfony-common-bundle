@@ -93,8 +93,10 @@ class Curl implements RestInterface, HeadersInterface
         $url = rtrim($url, '?&');
         $parsedUrl = parse_url($url);
 
-        $url .= !empty($parsedUrl['query']) ? '&' : '?';
-        $url .= $query;
+        if(!empty($query)) {
+            $url .= !empty($parsedUrl['query']) ? '&' : '?';
+            $url .= $query;
+        }
 
         $opts = $this->opts;
 

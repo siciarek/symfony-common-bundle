@@ -1,5 +1,6 @@
 services:
 
-    Siciarek\SymfonyCommonBundle\Services\Net\Url: ~
+    scb.net_url:
+        class: Siciarek\SymfonyCommonBundle\Services\Net\Url
 
     Siciarek\SymfonyCommonBundle\Services\Net\Curl: ~

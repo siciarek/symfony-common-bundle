@@ -9,6 +9,8 @@
 namespace Siciarek\SymfonyCommonBundle\Services\Net;
 
 
+use Symfony\Component\Intl\ResourceBundle\ResourceBundleInterface;
+
 class Curl implements RestInterface, HeadersInterface
 {
     protected $opts = [];
@@ -16,6 +18,7 @@ class Curl implements RestInterface, HeadersInterface
     protected $auth = CURLAUTH_ANY;
     protected $headers = [];
     protected $response = [];
+
     /**
      * @var CurlExecInterface
      */
@@ -167,8 +170,10 @@ class Curl implements RestInterface, HeadersInterface
     }
 
     /**
+     * Handler for processing response headers by curl
+     *
      * @param $ch
-     * @param $header
+     * @param string $header
      * @return int
      */
     public function headerFunction($ch, $header)
@@ -190,6 +195,8 @@ class Curl implements RestInterface, HeadersInterface
     }
 
     /**
+     * Returns array of response headers
+     *
      * @return array
      */
     public function getHeaders()

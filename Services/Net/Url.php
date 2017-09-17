@@ -28,7 +28,7 @@ class Url
     protected $data = null;
 
     /**
-     * Empty frame
+     * Empty frameds
      * @var array
      */
     protected static $frame = [

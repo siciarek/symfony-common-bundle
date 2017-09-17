@@ -15,9 +15,11 @@ class Curl implements RestInterface
     protected $defaultHeaders = [];
     protected $auth = CURLAUTH_ANY;
     protected $headers = [];
+    protected $response = [];
 
     /**
      * Curl constructor.
+     *
      * @param null $tempdir
      * @param string $name
      * @param bool $debug
@@ -34,10 +36,6 @@ class Curl implements RestInterface
 
         $cookies = $tempdir . DIRECTORY_SEPARATOR . $name;
 
-        if (file_exists($cookies)) {
-            @unlink($cookies);
-        }
-
         $this->opts = [
             CURLOPT_HTTPHEADER => $this->defaultHeaders,
             CURLOPT_COOKIEFILE => $cookies,
@@ -49,38 +47,71 @@ class Curl implements RestInterface
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HEADER => $debug,
             CURLOPT_VERBOSE => $debug,
-            CURLOPT_HEADERFUNCTION => [$this, 'headersHandler'],
+            CURLOPT_HEADERFUNCTION => [$this, 'headerFunction'],
         ];
     }
 
     public function get($url, $data = null)
     {
-        $data = is_array($data) ? http_build_query($data) : $data;
+        $query = is_array($data) ? http_build_query($data) : $data;
 
-        $url = trim($url, '?&');
+        $url = trim($url);
+        $url = rtrim($url, '?&');
         $parsedUrl = parse_url($url);
-        if (!empty($parsedUrl['query'])) {
-            $url .= '&' . $data;
-        } else {
-            $url .= '?' . $data;
-        }
 
-        return $this->exit();
+        $url .= !empty($parsedUrl['query']) ? '&' : '?';
+        $url .= $query;
+
+        $opts = $this->opts;
+
+        $opts[CURLOPT_HTTPGET] = true;
+        $opts[CURLOPT_URL] = $url;
+
+        return $this->exec($opts);
     }
 
     public function post($url, $data = null)
     {
-        // TODO: Implement post() method.
+        $data = is_array($data) ? http_build_query($data) : $data;
+
+        $opts = $this->opts;
+
+        $opts[CURLOPT_POST] = true;
+        $opts[CURLOPT_URL] = $url;
+        $opts[CURLOPT_POSTFIELDS] = $data;
+
+        return $this->exec($opts);
     }
 
     public function put($url, $data = null)
     {
-        // TODO: Implement put() method.
+        $fp = fopen('php://temp', 'w');
+        if ($data !== null) {
+            fwrite($fp, $data);
+        }
+        fseek($fp, 0);
+
+        $opts = $this->opts;
+
+        $opts[CURLOPT_PUT] = true;
+        $opts[CURLOPT_URL] = $url;
+        $opts[CURLOPT_INFILE] = $fp;
+        $opts[CURLOPT_INFILESIZE] = strlen($data);
+
+        return $this->exec($opts);
     }
 
     public function delete($url, $data = null)
     {
-        // TODO: Implement delete() method.
+        $data = is_array($data) ? http_build_query($data) : $data;
+
+        $opts = $this->opts;
+
+        $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+        $opts[CURLOPT_URL] = $url;
+        $opts[CURLOPT_POSTFIELDS] = $data;
+
+        return $this->exec($opts);
     }
 
     /**
@@ -88,7 +119,7 @@ class Curl implements RestInterface
      * @param $header
      * @return int
      */
-    protected function headersHandler($ch, $header)
+    protected function headerFunction($ch, $header)
     {
         $match = [];
 
@@ -106,11 +137,25 @@ class Curl implements RestInterface
         return strlen($header);
     }
 
-    protected function exec()
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * Direct exec
+     *
+     * @param array $opts
+     * @return array
+     */
+    public function exec(array $opts)
     {
         $ch = curl_init();
-        curl_setopt_array($ch, $this->opts);
-        $response = curl_exec($ch);
+        curl_setopt_array($ch, $opts);
+        $content = curl_exec($ch);
         $info = curl_getinfo($ch);
         $headers = $this->getHeaders();
         curl_close($ch);
@@ -121,6 +166,6 @@ class Curl implements RestInterface
             'headers' => $headers,
         ];
 
-        return $this;
+        return $this->response;
     }
 }

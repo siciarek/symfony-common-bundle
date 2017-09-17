@@ -1,0 +1,5 @@
+scb_net_url:
+    class: Siciarek\SymfonyCommonBundle\Services\Net\Url
+
+scb_net_curl:
+    class: Siciarek\SymfonyCommonBundle\Services\Net\Curl

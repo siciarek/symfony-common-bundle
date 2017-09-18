@@ -9,7 +9,7 @@
 namespace Siciarek\SymfonyCommonBundle\Tests\Services\Net;
 
 use Siciarek\SymfonyCommonBundle\Services\Net\Curl;
-use Siciarek\SymfonyCommonBundle\Services\Net\CurlExec;
+
 use Siciarek\SymfonyCommonBundle\Services\Net\CurlExecInterface;
 use Siciarek\SymfonyCommonBundle\Services\Net\HeadersInterface;
 use Siciarek\SymfonyCommonBundle\Services\Net\RestInterface;
@@ -92,6 +92,9 @@ class CurlTest extends TestCase
 
     public function setUp()
     {
+        /**
+         * @var CurlExecInterface $curlExecMock
+         */
         $curlExecMock = $this->createMock(CurlExecInterface::class);
         $curlExecMock
             ->method('exec')

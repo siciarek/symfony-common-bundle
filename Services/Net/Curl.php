@@ -9,7 +9,7 @@
 namespace Siciarek\SymfonyCommonBundle\Services\Net;
 
 
-use Symfony\Component\Intl\ResourceBundle\ResourceBundleInterface;
+
 
 class Curl implements RestInterface, HeadersInterface
 {

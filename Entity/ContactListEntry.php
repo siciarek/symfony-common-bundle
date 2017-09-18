@@ -4,6 +4,7 @@ namespace Siciarek\SymfonyCommonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Siciarek\SymfonyCommonBundle\Model\Descriptable\Descriptable;
 
 /**
  * Siciarek\SymfonyCommonBundle\ContactListEntry
@@ -18,7 +19,14 @@ class ContactListEntry {
     const TYPE_EMAIL = 'email';
     const TYPE_FACEBOOK = 'facebook';
 
-    use ORMBehaviors\Blameable\Blameable,
+    public static $TYPES = [
+        self::TYPE_PHONE,
+        self::TYPE_PHONE,
+        self::TYPE_FACEBOOK,
+    ];
+
+    use Descriptable,
+        ORMBehaviors\Blameable\Blameable,
         ORMBehaviors\Timestampable\Timestampable,
         ORMBehaviors\SoftDeletable\SoftDeletable;
 

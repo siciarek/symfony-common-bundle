@@ -76,9 +76,9 @@ class UrlTest extends TestCase
     {
         return [
             [
-                'Google',
-                'http://google.com',
-                '172.217',
+                'Siciarek Online',
+                'http://siciarek.pl',
+                '85.17.184.27',
             ],
         ];
     }

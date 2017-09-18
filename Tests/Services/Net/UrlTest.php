@@ -21,7 +21,7 @@ class UrlTest extends TestCase
 {
     const SIMPLE_URL = 'http://google.com';
     const COMPLEX_URL = 'https://username:password@application.dev:8080/user/dashboard?form[firstName]=John&amp;form[lastName]=Doe&amp;choice[]=1&amp;choice[]=2&amp;title=Za%C5%BC%C3%B3%C5%82%C4%87+g%C4%99%C5%9Bl%C4%85+ja%C5%BA%C5%84&amp;id=1024#page-bottom';
-    const NONEXISTENT_URL = 'http://nonexistentdomain.com';
+    const NONEXISTENT_URL = 'http://surfinglivers.com';
 
     /**
      * @var Url

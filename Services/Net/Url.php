@@ -92,6 +92,7 @@ class Url
      * Returns DNS record data of host
      *
      * @return array DNS record data
+     * @throws InvalidUrl
      */
     public function getDnsRecord()
     {
@@ -146,7 +147,7 @@ class Url
      * @param string $name
      * @param array $arguments
      * @return string
-     * @throws InvalidUrl
+     * @throws \Exception
      */
     public function __call($name, $arguments)
     {

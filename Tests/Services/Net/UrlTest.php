@@ -100,6 +100,10 @@ class UrlTest extends TestCase
 
     /**
      * @dataProvider parseOkProvider
+     *
+     * @param $message
+     * @param $url
+     * @param $expected
      */
     public function testParseOk($message, $url, $expected)
     {
@@ -162,6 +166,8 @@ class UrlTest extends TestCase
      * @expectedException \Siciarek\SymfonyCommonBundle\Services\Net\Exceptions\InvalidUrl
      * @expectedExceptionMessage Use parse() method first.
      * @expectedExceptionCode 404
+     *
+     * @param $method
      */
     public function testExceptionGetters($method)
     {

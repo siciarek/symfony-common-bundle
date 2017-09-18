@@ -6,7 +6,7 @@
  * Time: 13:59
  */
 
-namespace Siciarek\SymfonyCommonBundle\Model\Contactable;
+namespace Siciarek\SymfonyCommonBundle\Model\Addressable;
 
 use Doctrine\ORM\Mapping as ORM;
 

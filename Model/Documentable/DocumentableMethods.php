@@ -16,4 +16,27 @@ namespace Siciarek\SymfonyCommonBundle\Model\Documentable;
 trait DocumentableMethods
 {
 
+    /**
+     * Set documentFolder
+     *
+     * @param \Siciarek\SymfonyCommonBundle\Entity\DocumentFolder $documentFolder
+     *
+     * @return $this
+     */
+    public function setDocumentFolder(\Siciarek\SymfonyCommonBundle\Entity\DocumentFolder $documentFolder = null)
+    {
+        $this->documentFolder = $documentFolder;
+
+        return $this;
+    }
+
+    /**
+     * Get documentFolder
+     *
+     * @return \Siciarek\SymfonyCommonBundle\Entity\DocumentFolder
+     */
+    public function getDocumentFolder()
+    {
+        return $this->documentFolder;
+    }
 }

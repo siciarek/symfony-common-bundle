@@ -20,5 +20,5 @@ trait ContactableProperties
     /**
      * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\ContactList")
      */
-    private $contactList;
+    protected $contactList;
 }

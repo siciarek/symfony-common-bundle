@@ -20,5 +20,5 @@ trait DocumentableProperties
     /**
      * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\DocumentFolder")
      */
-    private $documentFolder;
+    protected $documentFolder;
 }

@@ -20,5 +20,5 @@ trait AddressableProperties
     /**
      * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\AddressBook")
      */
-    private $addressBook;
+    protected $addressBook;
 }

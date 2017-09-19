@@ -8,6 +8,7 @@ composer.lock
 /web
 /bin
 /app
+/var
 
 # Cache and logs (Symfony2)
 /app/cache/*

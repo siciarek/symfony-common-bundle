@@ -30,7 +30,8 @@ class Curl implements RestInterface, ResponseHeadersInterface
      *
      * @return CurlExecInterface
      */
-    public function getCurlExec() {
+    public function getCurlExec()
+    {
         return $this->curlExec;
     }
 
@@ -39,7 +40,8 @@ class Curl implements RestInterface, ResponseHeadersInterface
      *
      * @param CurlExecInterface $curlExec
      */
-    public function setCurlExec(CurlExecInterface $curlExec) {
+    public function setCurlExec(CurlExecInterface $curlExec)
+    {
         $this->curlExec = $curlExec;
     }
 
@@ -82,11 +84,12 @@ class Curl implements RestInterface, ResponseHeadersInterface
     /**
      * Sends http GET request to given url
      *
-     * @param $url
-     * @param null $data
-     * @return mixed
+     * @param string $url
+     * @param null|mixed $data
+     * @param bool $followlocation
+     * @return array
      */
-    public function get($url, $data = null)
+    public function get($url, $data = null, $followlocation = true)
     {
         $query = is_array($data) ? http_build_query($data) : $data;
 
@@ -94,13 +97,14 @@ class Curl implements RestInterface, ResponseHeadersInterface
         $url = rtrim($url, '?&');
         $parsedUrl = parse_url($url);
 
-        if(!empty($query)) {
+        if (!empty($query)) {
             $url .= !empty($parsedUrl['query']) ? '&' : '?';
             $url .= $query;
         }
 
         $opts = $this->opts;
 
+        $opts[CURLOPT_FOLLOWLOCATION] = $followlocation;
         $opts[CURLOPT_HTTPGET] = true;
         $opts[CURLOPT_URL] = $url;
 
@@ -110,16 +114,18 @@ class Curl implements RestInterface, ResponseHeadersInterface
     /**
      * Sends http POST request to given url
      *
-     * @param $url
-     * @param null $data
-     * @return mixed
+     * @param string $url
+     * @param null|mixed $data
+     * @param bool $followlocation
+     * @return array
      */
-    public function post($url, $data = null)
+    public function post($url, $data = null, $followlocation = true)
     {
         $data = is_array($data) ? http_build_query($data) : $data;
 
         $opts = $this->opts;
 
+        $opts[CURLOPT_FOLLOWLOCATION] = $followlocation;
         $opts[CURLOPT_POST] = true;
         $opts[CURLOPT_URL] = $url;
         $opts[CURLOPT_POSTFIELDS] = $data;
@@ -130,11 +136,12 @@ class Curl implements RestInterface, ResponseHeadersInterface
     /**
      * Sends http PUT request to given url
      *
-     * @param $url
-     * @param null $data
-     * @return mixed
+     * @param string $url
+     * @param null|mixed $data
+     * @param bool $followlocation
+     * @return array
      */
-    public function put($url, $data = null)
+    public function put($url, $data = null, $followlocation = true)
     {
         $fp = fopen('php://temp', 'w');
         if ($data !== null) {
@@ -144,6 +151,7 @@ class Curl implements RestInterface, ResponseHeadersInterface
 
         $opts = $this->opts;
 
+        $opts[CURLOPT_FOLLOWLOCATION] = $followlocation;
         $opts[CURLOPT_PUT] = true;
         $opts[CURLOPT_URL] = $url;
         $opts[CURLOPT_INFILE] = $fp;
@@ -155,16 +163,18 @@ class Curl implements RestInterface, ResponseHeadersInterface
     /**
      * Sends http DELETE request to given url
      *
-     * @param $url
-     * @param null $data
-     * @return mixed
+     * @param string $url
+     * @param null|mixed $data
+     * @param bool $followlocation
+     * @return array
      */
-    public function delete($url, $data = null)
+    public function delete($url, $data = null, $followlocation = true)
     {
         $data = is_array($data) ? http_build_query($data) : $data;
 
         $opts = $this->opts;
 
+        $opts[CURLOPT_FOLLOWLOCATION] = $followlocation;
         $opts[CURLOPT_CUSTOMREQUEST] = RestInterface::METHOD_DELETE;
         $opts[CURLOPT_URL] = $url;
         $opts[CURLOPT_POSTFIELDS] = $data;

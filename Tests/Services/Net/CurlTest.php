@@ -105,7 +105,7 @@ class CurlTest extends TestCase
                 $info = [
                     'url' => $url,
                 ];
-                $headers = $obj->getHeaders();
+                $headers = $obj->getResponseHeaders();
 
                 return [
                     'content' => $content,

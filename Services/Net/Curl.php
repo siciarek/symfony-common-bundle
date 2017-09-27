@@ -9,8 +9,6 @@
 namespace Siciarek\SymfonyCommonBundle\Services\Net;
 
 
-
-
 class Curl implements RestInterface, HeadersInterface
 {
     protected $opts = [];

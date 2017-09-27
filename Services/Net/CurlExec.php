@@ -25,7 +25,7 @@ class CurlExec implements CurlExecInterface
         curl_setopt_array($ch, $opts);
         $content = curl_exec($ch);
         $info = curl_getinfo($ch);
-        $headers = $obj->getHeaders();
+        $headers = $obj->getResponseHeaders();
         curl_close($ch);
 
         return [

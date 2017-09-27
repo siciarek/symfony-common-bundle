@@ -14,8 +14,8 @@ interface CurlExecInterface
      * Wrapps and execute curl actions
      *
      * @param array $opts
-     * @param HeadersInterface $obj
+     * @param ResponseHeadersInterface $obj
      * @return array
      */
-    public function exec(array $opts, HeadersInterface $obj);
+    public function exec(array $opts, ResponseHeadersInterface $obj);
 }

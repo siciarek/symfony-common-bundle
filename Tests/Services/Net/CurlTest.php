@@ -11,7 +11,7 @@ namespace Siciarek\SymfonyCommonBundle\Tests\Services\Net;
 use Siciarek\SymfonyCommonBundle\Services\Net\Curl;
 
 use Siciarek\SymfonyCommonBundle\Services\Net\CurlExecInterface;
-use Siciarek\SymfonyCommonBundle\Services\Net\HeadersInterface;
+use Siciarek\SymfonyCommonBundle\Services\Net\ResponseHeadersInterface;
 use Siciarek\SymfonyCommonBundle\Services\Net\RestInterface;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 
@@ -98,7 +98,7 @@ class CurlTest extends TestCase
         $curlExecMock = $this->createMock(CurlExecInterface::class);
         $curlExecMock
             ->method('exec')
-            ->will($this->returnCallback(function (array $opts, HeadersInterface $obj) {
+            ->will($this->returnCallback(function (array $opts, ResponseHeadersInterface $obj) {
                 $url = $opts[CURLOPT_URL];
 
                 $content = $opts;

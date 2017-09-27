@@ -9,7 +9,7 @@
 namespace Siciarek\SymfonyCommonBundle\Services\Net;
 
 
-class Curl implements RestInterface
+class Curl implements RestInterface, ResponseHeadersInterface
 {
     protected $opts = [];
     protected $defaultHeaders = [];

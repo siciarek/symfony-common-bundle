@@ -9,12 +9,15 @@
 namespace Siciarek\SymfonyCommonBundle\Services\Net;
 
 
-class Curl implements RestInterface, HeadersInterface
+class Curl implements RestInterface
 {
     protected $opts = [];
     protected $defaultHeaders = [];
     protected $auth = CURLAUTH_ANY;
-    protected $headers = [];
+    protected $responseHeaders = [];
+
+
+    protected $requestHeaders = [];
     protected $response = [];
 
     /**
@@ -184,10 +187,10 @@ class Curl implements RestInterface, HeadersInterface
             $label = trim($match[1]);
             $value = trim($match[2]);
 
-            if (isset($this->headers[$label])) {
-                $this->headers[$label] = array_merge((array)$this->headers[$label], (array)$value);
+            if (isset($this->responseHeaders[$label])) {
+                $this->responseHeaders[$label] = array_merge((array)$this->responseHeaders[$label], (array)$value);
             } else {
-                $this->headers[$label] = $value;
+                $this->responseHeaders[$label] = $value;
             }
         }
 
@@ -199,9 +202,28 @@ class Curl implements RestInterface, HeadersInterface
      *
      * @return array
      */
-    public function getHeaders()
+    public function getResponseHeaders()
     {
-        return $this->headers;
+        return $this->responseHeaders;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequestHeaders()
+    {
+        return $this->requestHeaders;
+    }
+
+    /**
+     * @param array $requestHeaders
+     * @return Curl
+     */
+    public function setRequestHeaders($requestHeaders)
+    {
+        $this->requestHeaders = $requestHeaders;
+
+        return $this;
     }
 
     /**
@@ -212,6 +234,8 @@ class Curl implements RestInterface, HeadersInterface
      */
     public function exec(array $opts)
     {
+        $opts[CURLOPT_HTTPHEADER] = $this->getRequestHeaders();
+
         return $this->getCurlExec()->exec($opts, $this);
     }
 }

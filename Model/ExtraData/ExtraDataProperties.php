@@ -20,5 +20,5 @@ trait ExtraDataProperties
     /**
      * @ORM\Column(type="json_array")
      */
-    protected $data;
+    protected $data = [];
 }

@@ -6,8 +6,6 @@ composer.lock
 /build
 /temp
 /vendor
-/web
-/bin
 /app
 /var
 /phpunit.xml

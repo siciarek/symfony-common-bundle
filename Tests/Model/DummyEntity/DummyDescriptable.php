@@ -1,6 +1,6 @@
 <?php
 
-namespace Siciarek\SymfonyCommonBundle\Tests\Model\Entity;
+namespace Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity;
 
 use Siciarek\SymfonyCommonBundle\Model as DBBehavior;
 

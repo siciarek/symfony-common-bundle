@@ -6,18 +6,18 @@ use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity as E;
 
 /**
- * Class ExtraDataTest
+ * Class TimestampableOnCreateTest
  * @package Siciarek\SymfonyCommonBundle\Tests\Services\Model\
  *
- * @group model
+ * @group tsmodel
  */
-class ExtraDataTest extends TestCase
+class TimestampableOnCreateTest extends TestCase
 {
     public static function methodsProvider()
     {
         return [
-            ['getData'],
-            ['setData'],
+            ['setCreatedAt'],
+            ['getCreatedAt'],
         ];
     }
 
@@ -27,25 +27,21 @@ class ExtraDataTest extends TestCase
      */
     public function testMethodsExist($method)
     {
-        $obj = new E\DummyExtraData();
+        $obj = new E\DummyTimestampableOnCreate();
         $this->assertTrue(method_exists($obj, $method), $method);
     }
 
     public function testMethodsWorkProperely()
     {
-        $data = [
-            'John' => 'Lennon',
-            'Paul' => 'McCartney',
-            'George' => 'Harrison',
-            'Ringo' => 'Starr',
-        ];
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $obj = new E\DummyExtraData();
+        $obj = new E\DummyTimestampableOnCreate();
 
-        $this->assertNull($obj->getData());
+        $this->assertNull($obj->getCreatedAt());
 
-        $obj->setData($data);
+        $em->persist($obj);
 
-        $this->assertEquals($data, $obj->getData());
+        $this->assertNotNull($obj->getCreatedAt());
+        $this->assertInstanceOf(\DateTimeImmutable::class, $obj->getCreatedAt());
     }
 }

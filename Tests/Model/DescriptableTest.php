@@ -2,9 +2,8 @@
 
 namespace Siciarek\SymfonyCommonBundle\Tests\Model;
 
-use Siciarek\SymfonyCommonBundle\Entity\AddressBook;
-use Siciarek\SymfonyCommonBundle\Entity\ContactListEntry;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
+use Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity as E;
 
 /**
  * Class DescriptableTest
@@ -30,7 +29,7 @@ class DescriptableTest extends TestCase
      */
     public function testMethodsExist($method)
     {
-        $obj = new Entity\DummyDescriptable();
+        $obj = new E\DummyDescriptable();
         $this->assertTrue(method_exists($obj, $method), $method);
     }
 
@@ -45,7 +44,7 @@ Phasellus sit amet mauris a orci congue imperdiet. Vestibulum consectetur feugia
 Morbi pharetra vulputate ante, eu fringilla tortor facilisis et. Donec facilisis nunc ac risus vehicula imperdiet. Aenean dictum quam purus, ac convallis magna mollis non. Aenean porta mi ut urna elementum, vitae ullamcorper ligula eleifend. Integer vehicula neque risus. Praesent eu diam risus. Sed non tortor ac justo tempor venenatis in auctor sem.
 INFO;
 
-        $obj = new Entity\DummyDescriptable();
+        $obj = new E\DummyDescriptable();
 
         $this->assertNull($obj->getDescription());
         $this->assertNull($obj->getInfo());

@@ -1,5 +1,9 @@
 services:
 
+    Siciarek\SymfonyCommonBundle\Model\TimestampableOnCreate\EventListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist, connection: default }
+
     scb.net_url:
         class: Siciarek\SymfonyCommonBundle\Services\Net\Url
 

@@ -4,7 +4,7 @@ namespace Siciarek\SymfonyCommonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-use Siciarek\SymfonyCommonBundle\Model\Descriptable\Descriptable;
+use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
 
 /**
  * Siciarek\SymfonyCommonBundle\Entity\Address
@@ -31,7 +31,7 @@ class Address
         self::TYPE_DELIVERY,
     ];
 
-    use Descriptable,
+    use DBBehaviors\Descriptable\Descriptable,
         ORMBehaviors\Geocodable\Geocodable,
         ORMBehaviors\Sortable\Sortable,
         ORMBehaviors\Blameable\Blameable,

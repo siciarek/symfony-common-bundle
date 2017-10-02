@@ -4,7 +4,7 @@ namespace Siciarek\SymfonyCommonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-use Siciarek\SymfonyCommonBundle\Model\Descriptable\Descriptable;
+use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
 
 /**
  * Siciarek\SymfonyCommonBundle\ContactListEntry
@@ -26,7 +26,7 @@ class ContactListEntry
         self::TYPE_FACEBOOK,
     ];
 
-    use Descriptable,
+    use DBBehaviors\Descriptable\Descriptable,
         ORMBehaviors\Blameable\Blameable,
         ORMBehaviors\Timestampable\Timestampable,
         ORMBehaviors\SoftDeletable\SoftDeletable;

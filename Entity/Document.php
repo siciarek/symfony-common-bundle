@@ -35,7 +35,8 @@ class Document
 
     use DBBehaviors\Descriptable\Descriptable,
         ORMBehaviors\Blameable\Blameable,
-        ORMBehaviors\Timestampable\Timestampable;
+        ORMBehaviors\Timestampable\Timestampable,
+        ORMBehaviors\SoftDeletable\SoftDeletable;
 
     public function __toString()
     {

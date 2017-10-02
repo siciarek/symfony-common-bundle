@@ -18,6 +18,10 @@ before_script:
   - rm -rf ./app
   - tar -zxf ./Tests/data/app.tar.gz
   - composer install
-  - ./bin/console
+  - bin/console doctrine:database:drop --force
+  - bin/console doctrine:database:create
+  - bin/console doctrine:schema:create
+  - bin/console doctrine:schema:update --force
+  - bin/console doctrine:schema:validate
 
 script: phpunit

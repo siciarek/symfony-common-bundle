@@ -15,8 +15,9 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 
 before_script:
-  - rm -rvf ./app
-  - tar -zxvf ./Tests/data/app.tar.gz
+  - rm -rf ./app
+  - tar -zxf ./Tests/data/app.tar.gz
   - composer install
+  - ./bin/console
 
 script: phpunit

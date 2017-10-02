@@ -23,5 +23,6 @@ before_script:
   - bin/console doctrine:schema:create
   - bin/console doctrine:schema:update --force
   - bin/console doctrine:schema:validate
+  - mysql -e 'SHOW CREATE TABLE test.scb_address;'
 
 script: phpunit --coverage-text

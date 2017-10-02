@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Siciarek\SymfonyCommonBundle\Model\Contactable\ContactableInterface;
 use Siciarek\SymfonyCommonBundle\Entity as E;
 
-class ContactListEntry
+class ContactList
 {
 
     /**
@@ -21,7 +21,7 @@ class ContactListEntry
     protected $entityManager;
 
     /**
-     * ContactListEntry constructor.
+     * ContactList constructor.
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -36,16 +36,17 @@ class ContactListEntry
      * @param bool $strict if true strict value validation is processed
      * @throws Exceptions\ContactListEntry
      */
-    public function validate($type, $value, $strict = false) {
-        switch($type) {
+    public function validate($type, $value, $strict = false)
+    {
+        switch ($type) {
             case E\ContactListEntry::TYPE_EMAIL:
-                # TODO: validate value if not valid - throw new Exceptions\ContactListEntry('Invalid email: ' . $value);
+                # TODO: validate value if not valid - throw new Exceptions\ContactList('Invalid email: ' . $value);
                 break;
             case E\ContactListEntry::TYPE_PHONE:
-                # TODO: validate value if not valid - throw new Exceptions\ContactListEntry('Invalid phone number: ' . $value);
+                # TODO: validate value if not valid - throw new Exceptions\ContactList('Invalid phone number: ' . $value);
                 break;
             case E\ContactListEntry::TYPE_FACEBOOK:
-                # TODO: validate value if not valid - throw new Exceptions\ContactListEntry('Invalid facebook identifier: ' . $value);
+                # TODO: validate value if not valid - throw new Exceptions\ContactList('Invalid facebook identifier: ' . $value);
                 break;
         }
     }
@@ -105,11 +106,12 @@ class ContactListEntry
         $this->entityManager->persist($owner);
 
         # Set current entry main in scope of the type:
-        $currentListOfType = $owner->getContactList()->getEntries()->filter(function (E\ContactListEntry $entry) use (
-            $type
-        ) {
-            return $entry->getType() === $type;
-        });
+        $currentListOfType = $owner
+            ->getContactList()
+            ->getEntries()
+            ->filter(function (E\ContactListEntry $entry) use ($type) {
+                return $entry->getType() === $type;
+            });
 
         foreach ($currentListOfType as $e) {
             $main = $e->getType() === $type && $e->getValue() === $value;

@@ -8,22 +8,22 @@
 
 namespace Siciarek\SymfonyCommonBundle\Tests\Services\Model;
 
-use Siciarek\SymfonyCommonBundle\Services\Model\ContactListEntry;
+use Siciarek\SymfonyCommonBundle\Services\Model\ContactList;
 use Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity\DummyContactable;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Entity as E;
 
 /**
- * Class ContactListEntryTest
+ * Class ContactListTest
  * @package Siciarek\SymfonyCommonBundle\Tests\Services\Model\
  *
  * @group service
- * @group cle
+ * @group contact
  */
-class ContactListEntryTest extends TestCase
+class ContactListTest extends TestCase
 {
     /**
-     * @var ContactListEntry
+     * @var ContactList
      */
     protected $srv;
 
@@ -76,7 +76,7 @@ class ContactListEntryTest extends TestCase
     public static function basicProvider()
     {
         return [
-            [ContactListEntry::class, 'add'],
+            [ContactList::class, 'add'],
         ];
     }
 
@@ -129,6 +129,6 @@ class ContactListEntryTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->srv = $this->getContainer()->get('scb.model_contact');
+        $this->srv = $this->getContainer()->get('scb.model_contact_list');
     }
 }

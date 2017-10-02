@@ -10,7 +10,17 @@ services:
     scb.net_curl:
         class: Siciarek\SymfonyCommonBundle\Services\Net\Curl
 
-    scb.model_contact:
-        class: Siciarek\SymfonyCommonBundle\Services\Model\ContactListEntry
+    scb.model_contact_list:
+        class: Siciarek\SymfonyCommonBundle\Services\Model\ContactList
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    scb.model_address_book:
+        class: Siciarek\SymfonyCommonBundle\Services\Model\AddressBook
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    scb.model_document_folder:
+        class: Siciarek\SymfonyCommonBundle\Services\Model\DocumentFolder
         arguments:
             - '@doctrine.orm.entity_manager'

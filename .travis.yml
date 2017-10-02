@@ -25,4 +25,4 @@ before_script:
   - bin/console doctrine:schema:validate
   - mysql -e 'SHOW CREATE TABLE test.scb_address\G'
 
-script: phpunit --coverage-text
+script: phpunit --colors-never --coverage-text

@@ -7,7 +7,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
 
 /**
- * Siciarek\SymfonyCommonBundle\ContactListEntry
+ * Siciarek\SymfonyCommonBundle\ContactList
  *
  * @ORM\Entity
  * @ORM\Table(name="scb_contact_list_entry")

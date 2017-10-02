@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait ExtraDataProperties
 {
     /**
-     * @ORM\Column(type="json", nullable=true)
+     * @ORM\Column(type="json_array", nullable=true)
      */
     protected $data;
 }

@@ -44,6 +44,13 @@ class AddressBookTest extends TestCase
         $this->assertInstanceOf($class, $this->srv);
     }
 
+    public function testAdd()
+    {
+        $condition = $this->srv->add();
+
+        $this->assertTrue($condition);
+    }
+
     public function setUp()
     {
         parent::setUp();

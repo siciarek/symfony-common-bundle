@@ -5,6 +5,12 @@ php:
   - 7.1
   - 7.2
 
+services:
+  - mysql
+
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
 before_script:
   - rm -rvf ./app
   - tar -zxvf ./Tests/data/app.tar.gz

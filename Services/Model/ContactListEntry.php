@@ -29,43 +29,74 @@ class ContactListEntry
     }
 
     /**
+     * Validate entry
+     *
+     * @param string $type contact list entry type
+     * @param string $value contact list entry value
+     * @param bool $strict if true strict value validation is processed
+     * @throws Exceptions\ContactListEntry
+     */
+    public function validate($type, $value, $strict = false) {
+        switch($type) {
+            case E\ContactListEntry::TYPE_EMAIL:
+                # TODO: validate value if not valid - throw new Exceptions\ContactListEntry('Invalid email: ' . $value);
+                break;
+            case E\ContactListEntry::TYPE_PHONE:
+                # TODO: validate value if not valid - throw new Exceptions\ContactListEntry('Invalid phone number: ' . $value);
+                break;
+            case E\ContactListEntry::TYPE_FACEBOOK:
+                # TODO: validate value if not valid - throw new Exceptions\ContactListEntry('Invalid facebook identifier: ' . $value);
+                break;
+        }
+    }
+
+    /**
      * Add contact to owners contact list.
      *
      * @param ContactableInterface $owner
      * @param string $type contact list entry type
      * @param string $value contact list entry value
+     * @param bool $strict if true strict value validation is processed
      * @return bool returns if operation succeed
+     * @throws Exceptions\ContactListEntry
      */
-    public function add(ContactableInterface $owner, $type, $value)
+    public function add(ContactableInterface $owner, $type, $value, $strict = false)
     {
+        # Sanitize data:
+        $type = trim($type);
+        $value = trim($value);
 
-        # Type validation:
+        # Validate type:
         if (false === in_array($type, E\ContactListEntry::AVAILABLE_TYPES)) {
             throw new Exceptions\ContactListEntry('Invalid contact list entry type: '.$type);
         }
 
-        # If owner has no contact list yet, create it:
+        # If owner has no contact list yet, set it up:
         if (false === $owner->getContactList() instanceof E\ContactList) {
             $owner->setContactList(new E\ContactList());
             $this->entityManager->persist($owner);
             $this->entityManager->flush();
         }
 
+        # Validate value:
+        $this->validate($type, $value, $strict);
 
-        # TODO: value validation
-        # TODO: if value of given type already exists do noting and return success
-
-        $exists = $owner->getContactList()->getEntries()->filter(function (E\ContactListEntry $entry) use (
-            $type,
-            $value
-        ) {
-            return $entry->getType() === $type && $entry->getValue() === $value;
-        });
+        # If value of given type already exists do noting and return success
+        $exists = $owner
+            ->getContactList()
+            ->getEntries()
+            ->filter(function (E\ContactListEntry $entry) use (
+                $type,
+                $value
+            ) {
+                return $entry->getType() === $type && $entry->getValue() === $value;
+            });
 
         if ($exists->count() > 0) {
             return true;
         }
 
+        # Create entry
         $entry = new E\ContactListEntry();
         $entry->setType($type);
         $entry->setValue($value);
@@ -73,6 +104,7 @@ class ContactListEntry
 
         $this->entityManager->persist($owner);
 
+        # Set current entry main in scope of the type:
         $currentListOfType = $owner->getContactList()->getEntries()->filter(function (E\ContactListEntry $entry) use (
             $type
         ) {
@@ -85,8 +117,10 @@ class ContactListEntry
             $this->entityManager->persist($e);
         }
 
+        # Persist in database:
         $this->entityManager->flush();
 
+        # Return success:
         return true;
     }
 }

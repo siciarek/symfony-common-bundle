@@ -42,6 +42,6 @@ class TimestampableOnCreateTest extends TestCase
         $em->persist($obj);
 
         $this->assertNotNull($obj->getCreatedAt());
-        $this->assertInstanceOf(\DateTimeImmutable::class, $obj->getCreatedAt());
+        $this->assertInstanceOf(\DateTime::class, $obj->getCreatedAt());
     }
 }

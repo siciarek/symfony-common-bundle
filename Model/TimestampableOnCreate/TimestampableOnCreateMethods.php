@@ -13,7 +13,7 @@ trait TimestampableOnCreateMethods
     /**
      * Returns createdAt value.
      *
-     * @return \DateTimeImmutable
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -21,10 +21,10 @@ trait TimestampableOnCreateMethods
     }
 
     /**
-     * @param \DateTimeImmutable $createdAt
+     * @param \DateTime $createdAt
      * @return $this
      */
-    public function setCreatedAt(\DateTimeImmutable $createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 

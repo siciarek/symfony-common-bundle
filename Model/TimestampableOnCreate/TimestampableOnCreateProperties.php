@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 trait TimestampableOnCreateProperties
 {
     /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     * @var \DateTimeImmutable
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
      */
     protected $createdAt;
 }

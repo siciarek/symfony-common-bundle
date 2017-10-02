@@ -31,7 +31,7 @@ class EventListener
         if (array_key_exists(TimestampableOnCreate::class, class_uses($entity))) {
 
             // Create a datetime with microseconds
-            $dateTime = \DateTimeImmutable::createFromFormat('U.u', sprintf('%.6F', microtime(true)));
+            $dateTime = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)));
             $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
             if (null === $entity->getCreatedAt()) {

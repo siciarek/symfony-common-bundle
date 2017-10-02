@@ -6,6 +6,8 @@ php:
   - 7.2
 
 before_script:
+  - rm -rvf ./app
+  - tar -zxvf ./Tests/data/app.tar.gz
   - composer install
 
 script: phpunit

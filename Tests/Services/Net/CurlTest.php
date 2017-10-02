@@ -92,6 +92,8 @@ class CurlTest extends TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         /**
          * @var CurlExecInterface $curlExecMock
          */
@@ -114,7 +116,7 @@ class CurlTest extends TestCase
                 ];
             }));
 
-        $this->srv = new Curl();
+        $this->srv = $this->getContainer()->get('scb.net_curl');
         $this->srv->setCurlExec($curlExecMock);
     }
 }

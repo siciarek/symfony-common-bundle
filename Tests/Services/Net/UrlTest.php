@@ -197,6 +197,7 @@ class UrlTest extends TestCase
 
     public function setUp()
     {
-        $this->srv = new Url();
+        parent::setUp();
+        $this->srv = $this->getContainer()->get('scb.net_url');
     }
 }

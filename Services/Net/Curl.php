@@ -11,6 +11,8 @@ namespace Siciarek\SymfonyCommonBundle\Services\Net;
 
 class Curl implements RestInterface, ResponseHeadersInterface
 {
+    const DEFAULT_COOKIE_FILE = 'COOKIES';
+
     protected $opts = [];
     protected $defaultHeaders = [];
     protected $auth = CURLAUTH_ANY;
@@ -49,10 +51,10 @@ class Curl implements RestInterface, ResponseHeadersInterface
      * Curl constructor.
      *
      * @param null $tempdir
-     * @param string $name
+     * @param string $cookieName
      * @param bool $debug
      */
-    public function __construct($tempdir = null, $name = 'COOKIES', $debug = false)
+    public function __construct($tempdir = null, $cookieName = self::DEFAULT_COOKIE_FILE, $debug = false)
     {
         $tempdir = $tempdir ?: sys_get_temp_dir();
 
@@ -62,7 +64,7 @@ class Curl implements RestInterface, ResponseHeadersInterface
             umask($umask);
         }
 
-        $cookies = $tempdir.DIRECTORY_SEPARATOR.$name;
+        $cookies = $tempdir.DIRECTORY_SEPARATOR.$cookieName;
 
         $this->opts = [
             CURLOPT_HTTPHEADER => $this->defaultHeaders,
@@ -231,7 +233,7 @@ class Curl implements RestInterface, ResponseHeadersInterface
      */
     public function setRequestHeaders($requestHeaders)
     {
-        $this->requestHeaders = $requestHeaders;
+        $this->requestHeaders = array_unique($requestHeaders);
 
         return $this;
     }

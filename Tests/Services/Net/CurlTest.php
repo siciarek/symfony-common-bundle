@@ -19,6 +19,7 @@ use Siciarek\SymfonyCommonBundle\Tests\TestCase;
  * Class CurlTest
  * @package Siciarek\SymfonyCommonBundle\Tests\Services\Net\
  *
+ * @group service
  * @group curl
  */
 class CurlTest extends TestCase

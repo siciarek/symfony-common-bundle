@@ -22,7 +22,7 @@ class Address
     const TYPE_INVOICE = 'invoice';
     const TYPE_DELIVERY = 'delivery';
 
-    public static $TYPES = [
+    const AVAILABLE_TYPES = [
         self::TYPE_GENERAL,
         self::TYPE_CORRESPONDENCE,
         self::TYPE_LOCATION,

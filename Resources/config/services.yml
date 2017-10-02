@@ -9,3 +9,6 @@ services:
 
     scb.net_curl:
         class: Siciarek\SymfonyCommonBundle\Services\Net\Curl
+
+    scb.model_contact:
+        class: Siciarek\SymfonyCommonBundle\Services\Model\ContactListEntry

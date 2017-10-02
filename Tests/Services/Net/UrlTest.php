@@ -15,6 +15,7 @@ use Siciarek\SymfonyCommonBundle\Services\Net\Url;
  * Class UrlTest
  * @package Siciarek\SymfonyCommonBundle\Tests\Services\Net
  *
+ * @group service
  * @group url
  */
 class UrlTest extends TestCase

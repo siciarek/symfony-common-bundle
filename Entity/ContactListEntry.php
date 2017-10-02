@@ -13,15 +13,16 @@ use Siciarek\SymfonyCommonBundle\Model\Descriptable\Descriptable;
  * @ORM\Table(name="scb_contact_list_entry")
  * @ORM\Entity(repositoryClass="ContactListEntryRepository")
  */
-class ContactListEntry {
+class ContactListEntry
+{
 
     const TYPE_PHONE = 'phone';
     const TYPE_EMAIL = 'email';
     const TYPE_FACEBOOK = 'facebook';
 
-    public static $TYPES = [
+    const AVAILABLE_TYPES = [
         self::TYPE_PHONE,
-        self::TYPE_PHONE,
+        self::TYPE_EMAIL,
         self::TYPE_FACEBOOK,
     ];
 
@@ -30,7 +31,7 @@ class ContactListEntry {
         ORMBehaviors\Timestampable\Timestampable,
         ORMBehaviors\SoftDeletable\SoftDeletable;
 
-   /**
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -48,6 +49,12 @@ class ContactListEntry {
      * @var boolean
      */
     private $main = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @var boolean
+     */
+    private $valid = true;
 
     /**
      * @ORM\Column()
@@ -95,7 +102,7 @@ class ContactListEntry {
      *
      * @return boolean
      */
-    public function getEnabled()
+    public function isEnabled()
     {
         return $this->enabled;
     }
@@ -119,9 +126,33 @@ class ContactListEntry {
      *
      * @return boolean
      */
-    public function getMain()
+    public function isMain()
     {
         return $this->main;
+    }
+
+    /**
+     * Set valid
+     *
+     * @param boolean $valid
+     *
+     * @return ContactListEntry
+     */
+    public function setValid($valid)
+    {
+        $this->valid = $valid;
+
+        return $this;
+    }
+
+    /**
+     * Get valid
+     *
+     * @return boolean
+     */
+    public function isValid()
+    {
+        return $this->valid;
     }
 
     /**

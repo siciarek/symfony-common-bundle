@@ -4,20 +4,21 @@ namespace Siciarek\SymfonyCommonBundle\Tests\Model;
 
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity as E;
+use Siciarek\SymfonyCommonBundle\Entity\ContactList;
 
 /**
- * Class TimestampableOnCreateTest
+ * Class ContactableTest
  * @package Siciarek\SymfonyCommonBundle\Tests\Services\Model\
  *
  * @group model
  */
-class TimestampableOnCreateTest extends TestCase
+class ContactableTest extends TestCase
 {
     public static function methodsProvider()
     {
         return [
-            ['setCreatedAt'],
-            ['getCreatedAt'],
+            ['setContactList'],
+            ['getContactList',],
         ];
     }
 
@@ -27,21 +28,18 @@ class TimestampableOnCreateTest extends TestCase
      */
     public function testMethodsExist($method)
     {
-        $obj = new E\DummyTimestampableOnCreate();
+        $obj = new E\DummyContactable();
         $this->assertTrue(method_exists($obj, $method), $method);
     }
 
     public function testMethodsWorkProperely()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $obj = new E\DummyContactable();
 
-        $obj = new E\DummyTimestampableOnCreate();
+        $contactList = new ContactList();
+        $obj->setContactList($contactList);
 
-        $this->assertNull($obj->getCreatedAt());
-
-        $em->persist($obj);
-
-        $this->assertNotNull($obj->getCreatedAt());
-        $this->assertInstanceOf(\DateTimeImmutable::class, $obj->getCreatedAt());
+        $this->assertInstanceOf(ContactList::class, $obj->getContactList());
+        $this->assertEquals($contactList, $obj->getContactList());
     }
 }

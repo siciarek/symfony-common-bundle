@@ -9,9 +9,9 @@
 namespace Siciarek\SymfonyCommonBundle\Model\Addressable;
 
 /**
- * Addressable trait.
+ * Addressable interface.
  *
- * Should be used inside entity where you need to add addresses to entities
+ * Should be implemented by entity where you need to add addresses to entities
  */
 interface AddressableInterface
 {

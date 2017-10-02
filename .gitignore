@@ -5,7 +5,10 @@ phpunit.phar
 composer.lock
 /build
 /temp
+/bin
 /vendor
 /app
 /var
 /phpunit.xml
+/build.xml
+/properties.conf

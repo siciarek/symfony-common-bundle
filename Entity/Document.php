@@ -24,7 +24,7 @@ class Document
     const TYPE_REFERENCE_IMAGE = 'reference_image';
     const TYPE_REFERENCE_MEDIA = 'reference_media';
 
-    public static $TYPES = [
+    const AVAILABLE_TYPES = [
         self::TYPE_FILE_DOCUMENT,
         self::TYPE_FILE_IMAGE,
         self::TYPE_FILE_MEDIA,

@@ -4,7 +4,6 @@ sudo: required
 language: php
 sudo: false
 php:
-  - 7.0
   - 7.1
   - 7.2
 
@@ -24,4 +23,4 @@ before_script:
   - bin/console doctrine:schema:update --force
   - bin/console doctrine:schema:validate
 
-script: phpunit
+script: phpunit --coverage-text

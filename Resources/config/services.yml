@@ -12,3 +12,5 @@ services:
 
     scb.model_contact:
         class: Siciarek\SymfonyCommonBundle\Services\Model\ContactListEntry
+        arguments:
+            - '@doctrine.orm.entity_manager'

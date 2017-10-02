@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait ContactableProperties
 {
     /**
-     * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\ContactList")
+     * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\ContactList", cascade={"persist"})
      */
     protected $contactList;
 }

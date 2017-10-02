@@ -69,7 +69,7 @@ class ContactListEntry
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\ContactList", inversedBy="entries")
+     * @ORM\ManyToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\ContactList", inversedBy="entries", cascade={"persist"})
      */
     private $list;
 

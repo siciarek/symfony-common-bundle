@@ -89,6 +89,7 @@ class ContactList {
      */
     public function addEntry(\Siciarek\SymfonyCommonBundle\Entity\ContactListEntry $entry)
     {
+        $entry->setList($this);
         $this->entries[] = $entry;
 
         return $this;

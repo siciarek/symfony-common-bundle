@@ -12,6 +12,7 @@ use Siciarek\SymfonyCommonBundle\Services\Model\ContactListEntry;
 use Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity\DummyContactable;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Entity as E;
+
 /**
  * Class ContactListEntryTest
  * @package Siciarek\SymfonyCommonBundle\Tests\Services\Model\
@@ -28,12 +29,34 @@ class ContactListEntryTest extends TestCase
 
     public static function addOkProvider()
     {
-        $owner = new DummyContactable();
-
         return [
-            [$owner, E\ContactListEntry::TYPE_PHONE, '+48603173114',],
-            [$owner, E\ContactListEntry::TYPE_EMAIL, 'siciarek@gmail.com',],
-            [$owner, E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
+            [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
+            [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
+            [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
+            [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
+            [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
+            [E\ContactListEntry::TYPE_PHONE, '+48603173900',],
+            [E\ContactListEntry::TYPE_PHONE, '+48603173333',],
+            [E\ContactListEntry::TYPE_PHONE, '+48511000111',],
+            [E\ContactListEntry::TYPE_EMAIL, 'first@example.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'second@example.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'third@example.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
         ];
     }
 
@@ -78,16 +101,30 @@ class ContactListEntryTest extends TestCase
         $this->srv->add($owner, $type, $value);
     }
 
-    /**
-     * @dataProvider addOkProvider
-     */
-    public function testAddOk($owner, $type, $value)
+    public function testAddOk()
     {
-        $actual = $this->srv->add($owner, $type, $value);
+        $owner = new DummyContactable();
 
-        $this->assertTrue($actual);
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em->persist($owner);
+        $em->flush();
+
+        $entries = self::addOkProvider();
+
+        $unique = [];
+        foreach ($entries as $e) {
+            $unique[implode('', $e)] = true;
+        }
+
+        foreach ($entries as $entry) {
+            list($type, $value) = $entry;
+            $actual = $this->srv->add($owner, $type, $value);
+            $this->assertTrue($actual);
+        }
+
+        $this->assertNotEquals(count($entries), $owner->getContactList()->getEntries()->count());
+        $this->assertEquals(count($unique), $owner->getContactList()->getEntries()->count());
     }
-
 
 
     public function setUp()

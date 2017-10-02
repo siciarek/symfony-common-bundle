@@ -18,4 +18,12 @@ class DummyContactable implements DBBehavior\Contactable\ContactableInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

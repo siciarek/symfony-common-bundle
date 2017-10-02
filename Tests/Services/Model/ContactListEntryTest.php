@@ -126,7 +126,6 @@ class ContactListEntryTest extends TestCase
         $this->assertEquals(count($unique), $owner->getContactList()->getEntries()->count());
     }
 
-
     public function setUp()
     {
         parent::setUp();

@@ -175,17 +175,11 @@ class Filter
                 $value = filter_var($value, FILTER_SANITIZE_EMAIL);
                 $value = $this->sanitize($value, self::LOWER);
 
-                $constraint = new Email();
-                $constraint->strict = $strict;
-                $constraint->checkMX = $strict;
+                $violations = $this->validator->validate($value, [
+                    new Email(['strict' => $strict, 'checkMX' => $strict]),
+                ]);
 
-                $violations = $this->validator->validate($value, [$constraint]);
-
-                if (count($violations) > 0) {
-                    return null;
-                }
-
-                return $value;
+                return $violations->count() > 0 ? null : $value;
 
             case self::STRING:
                 $value = $this->sanitize($value, self::TRIM);

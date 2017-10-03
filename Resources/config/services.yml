@@ -1,5 +1,8 @@
 services:
 
+    scb.utils_filter:
+        class: Siciarek\SymfonyCommonBundle\Services\Utils\Filter
+
     Siciarek\SymfonyCommonBundle\Model\TimestampableOnCreate\EventListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist, connection: default }

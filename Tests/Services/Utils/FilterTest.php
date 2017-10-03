@@ -1,0 +1,163 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: siciarek
+ * Date: 03.10.17
+ * Time: 10:27
+ */
+
+namespace Siciarek\SymfonyCommonBundle\Tests\Services\Utils;
+
+use Siciarek\SymfonyCommonBundle\Tests\TestCase;
+use Siciarek\SymfonyCommonBundle\Services\Utils\Filter;
+use Twig\Node\Expression\FilterExpression;
+
+/**
+ * Class FilterTest
+ * @package Siciarek\SymfonyCommonBundle\Tests\Services\Utils
+ *
+ * @group service
+ * @group filter
+ */
+class FilterTest extends TestCase
+{
+    /**
+     * @var Filter
+     */
+    protected $srv;
+
+    public static function basicProvider()
+    {
+        return [
+            [Filter::class, 'add'],
+        ];
+    }
+
+    /**
+     * @dataProvider basicProvider
+     *
+     * @param $class
+     * @param $method
+     */
+    public function testBasic($class, $method)
+    {
+        $this->assertInstanceOf($class, $this->srv);
+    }
+
+    public static function sanitizeNotOkProvider()
+    {
+        return [
+            [null, null],
+            ['', null],
+            ['ip', null],
+            ['dummy', null],
+        ];
+    }
+
+    public static function sanitizeOkProvider()
+    {
+        $text = <<<TXT
+
+
+
+
+        Pierwszy
+
+jeden                  drugi
+
+                      Zażółć gęślą jaźń.
+
+trzeci
+
+
+czwarty
+
+
+ostatni
+
+
+
+
+
+
+TXT;
+
+
+        return [
+            [Filter::STRING, '<p>Zażółć <strong>gęślą</strong> jaźń!</p>', 'Zażółć gęślą jaźń!'],
+
+            [Filter::NORMALIZE, $text, 'Pierwszy jeden drugi Zażółć gęślą jaźń. trzeci czwarty ostatni'],
+
+            [Filter::INT, 'A4', null],
+            [Filter::INT, '4A', 4],
+            [Filter::INT, '  2 345', 2345],
+            [Filter::INT, '  2 345.00', 2345],
+            [Filter::FLOAT, '  2 345.45', 2345.45],
+            [Filter::FLOAT, '  X2 345.45', null],
+            [Filter::FLOAT, '  2 345.45X', 2345.45],
+
+            [Filter::NULL, null, null],
+            [Filter::NULL, '   ', null],
+            [[Filter::NULL], '   ', null],
+
+            [Filter::TRIM, '    siciarek@gmail.com       ', 'siciarek@gmail.com'],
+            [Filter::ASCII, 'Zażółć gęślą jaźń', 'Zazolc gesla jazn'],
+
+            [Filter::LOWER, 'ZAŻÓŁĆ GĘŚLĄ JAŹŃ', 'zażółć gęślą jaźń'],
+            [Filter::UPPER, 'zażółć gęślą jaźń', 'ZAŻÓŁĆ GĘŚLĄ JAŹŃ'],
+
+            [Filter::ALPHANUM, 'zażółć gęślą jaźń 4', 'zaglja4'],
+
+            [Filter::IP4, '127.0.0.1', '127.0.0.1'],
+            [Filter::IP4, '327.0.0.1', null],
+
+            [Filter::IP6, '2001:db8:a0b:12f0::1', '2001:db8:a0b:12f0::1'],
+            [Filter::IP6, '32001:db8:a0b:12f0::1', null],
+
+            [Filter::EMAIL, '    siciarek@gmail.com       ', 'siciarek@gmail.com'],
+            [[Filter::EMAIL], '    SiCiareK@gmail.com       ', 'siciarek@gmail.com'],
+            [Filter::EMAIL, '    sici arek@gmail.com       ', 'siciarek@gmail.com'],
+            [Filter::EMAIL, '    sici arek@gm a i l.com       ', 'siciarek@gmail.com'],
+        ];
+    }
+
+    /**
+     * @dataProvider sanitizeOkProvider
+     *
+     * @param string|array $filter
+     * @param null|string $value
+     * @param null|string $expected
+     */
+    public function testSanitizeOk($filter, $value, $expected)
+    {
+        $this->srv = new Filter();
+
+        $actual = $this->srv->sanitize($value, $filter);
+
+        if($expected !== $actual) {
+            file_put_contents('temp.expected.dat', $expected);
+            file_put_contents('temp.actual.dat', $actual);
+        }
+
+        $this->assertTrue($expected === $actual);
+    }
+
+    /**
+     * @dataProvider sanitizeNotOkProvider
+     *
+     * @param string|array $filter
+     * @param null|string $value
+     *
+     * @expectedException \Siciarek\SymfonyCommonBundle\Services\Utils\Exceptions\Filter
+     */
+    public function testSanitizeNotOk($filter, $value)
+    {
+        $actual = $this->srv->sanitize($value, $filter);
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->srv = $this->getContainer()->get('scb.utils_filter');
+    }
+}

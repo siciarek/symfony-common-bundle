@@ -3,6 +3,7 @@
 composer.phar
 phpunit.phar
 composer.lock
+/temp.*
 /build
 /temp
 /bin

@@ -2,10 +2,8 @@ services:
 
     scb.utils_filter:
         class: Siciarek\SymfonyCommonBundle\Services\Utils\Filter
-
-    Siciarek\SymfonyCommonBundle\Model\TimestampableOnCreate\EventListener:
-        tags:
-            - { name: doctrine.event_listener, event: prePersist, connection: default }
+        arguments:
+            - '@validator'
 
     scb.net_url:
         class: Siciarek\SymfonyCommonBundle\Services\Net\Url
@@ -27,3 +25,7 @@ services:
         class: Siciarek\SymfonyCommonBundle\Services\Model\DocumentFolder
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Siciarek\SymfonyCommonBundle\Model\TimestampableOnCreate\EventListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist, connection: default }

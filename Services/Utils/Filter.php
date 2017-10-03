@@ -2,6 +2,10 @@
 
 namespace Siciarek\SymfonyCommonBundle\Services\Utils;
 
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 /**
  * Filter service
  *
@@ -41,6 +45,20 @@ class Filter
     ];
 
     /**
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    /**
+     * Filter constructor.
+     * @param ValidatorInterface $validator
+     */
+    public function __construct(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+    }
+
+    /**
      * Applies filter on value.
      *
      * @param string $value
@@ -48,7 +66,7 @@ class Filter
      * @return null|string
      * @throws Exceptions\Filter
      */
-    public function sanitize($value, $filters)
+    public function sanitize($value, $filters, $strict = true)
     {
         $filters = (array)$filters;
 
@@ -63,13 +81,20 @@ class Filter
                 throw new Exceptions\Filter('No such filter: "'.$filter.'".');
             }
 
-            $value = $this->applyFilter($value, $filter);
+            $value = $this->applyFilter($value, $filter, $strict);
         }
 
         return $value ?: null;
     }
 
-    private function applyFilter($value, $filter)
+    /**
+     * Applies filter on given value
+     *
+     * @param string $value
+     * @param string $filter
+     * @return mixed|string
+     */
+    public function applyFilter($value, $filter, $strict = true)
     {
         if ($value === null) {
             return $value;
@@ -115,7 +140,7 @@ class Filter
 
             case self::INT:
                 $value = str_replace('\xc2\xa0', '', $value);
-                $value = $this->applyFilter($value, [self::TRIM, self::NULL]);
+                $value = $this->sanitize($value, [self::TRIM, self::NULL]);
                 $value = preg_replace('/\s+/', '', $value);
 
                 if ($value !== null) {
@@ -125,7 +150,7 @@ class Filter
                 return $value;
 
             case self::FLOAT:
-                $value = $this->applyFilter($value, [self::NORMALIZE]);
+                $value = $this->sanitize($value, [self::NORMALIZE]);
                 $value = preg_replace('/\s+/', '', $value);
 
                 if ($value !== null) {
@@ -148,12 +173,22 @@ class Filter
 
             case self::EMAIL:
                 $value = filter_var($value, FILTER_SANITIZE_EMAIL);
-                $value = $this->applyFilter($value, self::LOWER);
+                $value = $this->sanitize($value, self::LOWER);
+
+                $constraint = new Email();
+                $constraint->strict = $strict;
+                $constraint->checkMX = $strict;
+
+                $violations = $this->validator->validate($value, [$constraint]);
+
+                if (count($violations) > 0) {
+                    return null;
+                }
 
                 return $value;
 
             case self::STRING:
-                $value = $this->applyFilter($value, self::TRIM);
+                $value = $this->sanitize($value, self::TRIM);
                 $value = filter_var($value, FILTER_SANITIZE_STRING);
                 $value = str_replace('\xc2\xa0', ' ', $value);
 

@@ -84,6 +84,18 @@ TXT;
 
 
         return [
+            [[Filter::EMAIL], '    SiCiareK@gmail.com       ', 'siciarek@gmail.com'],
+            [Filter::EMAIL, '    siciarek@gmail.com       ', 'siciarek@gmail.com'],
+            [Filter::EMAIL, '    sici arek@gmail.com       ', 'siciarek@gmail.com'],
+            [Filter::EMAIL, '    sici arek@gm a i l.com       ', 'siciarek@gmail.com'],
+            [Filter::EMAIL, 'siciarek@gmail.com', 'siciarek@gmail.com'],
+            [Filter::EMAIL, 'sici@arek@gmail.com', null],
+
+            [Filter::EMAIL, 'siciarek2gmail.com', null],
+            [Filter::EMAIL, 'siciarek#gmail.com', null],
+            [Filter::EMAIL, 'siciarek@sqlmkalkdo.com', null],
+            [Filter::EMAIL, 'siciarek@m.com', null],
+
             [Filter::STRING, '<p>Zażółć <strong>gęślą</strong> jaźń!</p>', 'Zażółć gęślą jaźń!'],
 
             [Filter::NORMALIZE, $text, 'Pierwszy jeden drugi Zażółć gęślą jaźń. trzeci czwarty ostatni'],
@@ -114,10 +126,6 @@ TXT;
             [Filter::IP6, '2001:db8:a0b:12f0::1', '2001:db8:a0b:12f0::1'],
             [Filter::IP6, '32001:db8:a0b:12f0::1', null],
 
-            [Filter::EMAIL, '    siciarek@gmail.com       ', 'siciarek@gmail.com'],
-            [[Filter::EMAIL], '    SiCiareK@gmail.com       ', 'siciarek@gmail.com'],
-            [Filter::EMAIL, '    sici arek@gmail.com       ', 'siciarek@gmail.com'],
-            [Filter::EMAIL, '    sici arek@gm a i l.com       ', 'siciarek@gmail.com'],
         ];
     }
 
@@ -130,16 +138,16 @@ TXT;
      */
     public function testSanitizeOk($filter, $value, $expected)
     {
-        $this->srv = new Filter();
+        $this->srv = new Filter($this->getContainer()->get('validator'), $this->getContainer()->get('translator'));
 
         $actual = $this->srv->sanitize($value, $filter);
 
-        if($expected !== $actual) {
+        if ($expected !== $actual) {
             file_put_contents('temp.expected.dat', $expected);
             file_put_contents('temp.actual.dat', $actual);
         }
 
-        $this->assertTrue($expected === $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

@@ -35,37 +35,36 @@ class ContactList
     }
 
     /**
-     * Validate entry
+     * Validate and sanitize entry
      *
      * @param string $type contact list entry type
      * @param string $value contact list entry value
      * @param bool $strict if true strict value validation is processed
      * @throws Exceptions\ContactListEntry
      */
-    public function validate($type, $value, $strict = true)
+    public function validateAndSanitize($type, $value, $strict = true)
     {
-        if($value === null) {
-            return null;
-        }
-
         switch ($type) {
             case E\ContactListEntry::TYPE_EMAIL:
-                $value = $this->filter->sanitize($value, [FilterInterface::EMAIL], $strict);
-                if(null === $value) {
-                    throw new Exceptions\ContactListEntry('Invalid email: ' . $value);
+                $val = $this->filter->sanitize($value, [FilterInterface::EMAIL], $strict);
+                if (null === $val) {
+                    throw new Exceptions\ContactListEntry('Invalid email: '.$value);
                 }
+                $value = $val;
                 break;
             case E\ContactListEntry::TYPE_PHONE:
-                $value = $this->filter->sanitize($value, [FilterInterface::PHONE_NUMBER], $strict);
-                if(null === $value) {
-                    throw new Exceptions\ContactListEntry('Invalid phone number: ' . $value);
+                $val = $this->filter->sanitize($value, [FilterInterface::PHONE_NUMBER], $strict);
+                if (null === $val) {
+                    throw new Exceptions\ContactListEntry('Invalid phone number: '.$value);
                 }
+                $value = $val;
                 break;
             case E\ContactListEntry::TYPE_FACEBOOK:
-                $value = $this->filter->sanitize($value, [FilterInterface::FACEBOOK_IDENTIFIER], $strict);
-                if(null === $value) {
-                    throw new Exceptions\ContactListEntry('Invalid facebook identifier: ' . $value);
+                $val = $this->filter->sanitize($value, [FilterInterface::FACEBOOK_IDENTIFIER], $strict);
+                if (null === $val) {
+                    throw new Exceptions\ContactListEntry('Invalid facebook identifier: '.$value);
                 }
+                $value = $val;
                 break;
         }
 
@@ -84,14 +83,14 @@ class ContactList
      */
     public function add(ContactableInterface $owner, $type, $value, $strict = true)
     {
-        # Sanitize data:
-        $type = trim($type);
-        $value = trim($value);
-
-        # Validate type:
+        # Sanitize and validate type:
+        $type = $this->filter->sanitize($type, [FilterInterface::TRIM, FilterInterface::NULL]);
         if (false === in_array($type, E\ContactListEntry::AVAILABLE_TYPES)) {
             throw new Exceptions\ContactListEntry('Invalid contact list entry type: '.$type);
         }
+
+        # Sanitize and validate value:
+        $value = $this->validateAndSanitize($type, $value, $strict);
 
         # If owner has no contact list yet, set it up:
         if (false === $owner->getContactList() instanceof E\ContactList) {
@@ -99,9 +98,6 @@ class ContactList
             $this->entityManager->persist($owner);
             $this->entityManager->flush();
         }
-
-        # Validate value:
-        $this->validate($type, $value, $strict);
 
         # If value of given type already exists do noting and return success
         $exists = $owner

@@ -9,6 +9,8 @@
 namespace Siciarek\SymfonyCommonBundle\Tests\Services\Model;
 
 use Siciarek\SymfonyCommonBundle\Services\Model\AddressBook;
+use Siciarek\SymfonyCommonBundle\Services\Model\Exceptions\Address;
+use Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity\DummyAddressable;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Entity as E;
 
@@ -33,6 +35,24 @@ class AddressBookTest extends TestCase
         ];
     }
 
+    public static function addOkProvider()
+    {
+        $owner = new DummyAddressable();
+
+        return [
+            [$owner, ['address' => 'ul. Ejsmonda 4/35', 'postalCode' => '93-249', 'place' => 'Łódź']],
+        ];
+    }
+
+    public static function addNotOkProvider()
+    {
+        $owner = new DummyAddressable();
+
+        return [
+            [$owner, [], 'No data given.'],
+        ];
+    }
+
     /**
      * @dataProvider basicProvider
      *
@@ -44,11 +64,37 @@ class AddressBookTest extends TestCase
         $this->assertInstanceOf($class, $this->srv);
     }
 
-    public function testAdd()
+    /**
+     * @dataProvider addOkProvider
+     */
+    public function testAddOk($owner, $data)
     {
-        $condition = $this->srv->add();
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em->persist($owner);
+        $em->flush();
+
+        $condition = $this->srv->add($owner, $data);
 
         $this->assertTrue($condition);
+    }
+
+    /**
+     * @dataProvider addNotOkProvider
+     */
+    public function testAddNotOk($owner, $data, $exceptionMessage)
+    {
+
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em->persist($owner);
+        $em->flush();
+
+        try {
+            $this->srv->add($owner, $data);
+            $this->fail('Exception should be thrown.');
+        }
+        catch(Address $exception) {
+            $this->assertEquals($exceptionMessage, $exception->getMessage());
+        }
     }
 
     public function setUp()

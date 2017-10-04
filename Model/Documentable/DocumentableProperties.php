@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait DocumentableProperties
 {
     /**
-     * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\DocumentFolder")
+     * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\DocumentFolder", cascade={"persist"})
      */
     protected $documentFolder;
 }

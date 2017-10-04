@@ -9,6 +9,8 @@
 namespace Siciarek\SymfonyCommonBundle\Tests\Services\Model;
 
 use Siciarek\SymfonyCommonBundle\Services\Model\ContactList;
+use Siciarek\SymfonyCommonBundle\Services\Model\Exceptions\ContactListEntry;
+use Siciarek\SymfonyCommonBundle\Services\Model\Exceptions;
 use Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity\DummyContactable;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Entity as E;
@@ -30,16 +32,16 @@ class ContactListTest extends TestCase
     public static function addOkProvider()
     {
         return [
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
-            [E\ContactListEntry::TYPE_FACEBOOK, 'jacek.siciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
+            [E\ContactListEntry::TYPE_FACEBOOK, 'JacekSiciarek',],
             [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
             [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
             [E\ContactListEntry::TYPE_PHONE, '+48603173114',],
@@ -49,14 +51,14 @@ class ContactListTest extends TestCase
             [E\ContactListEntry::TYPE_PHONE, '+48603173900',],
             [E\ContactListEntry::TYPE_PHONE, '+48603173333',],
             [E\ContactListEntry::TYPE_PHONE, '+48511000111',],
-            [E\ContactListEntry::TYPE_EMAIL, 'first@example.com',],
-            [E\ContactListEntry::TYPE_EMAIL, 'second@example.com',],
-            [E\ContactListEntry::TYPE_EMAIL, 'third@example.com',],
-            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
-            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
-            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
-            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
-            [E\ContactListEntry::TYPE_EMAIL, 'fourth@example.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'siciarek@gmail.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'siciarek@hotmail.com',],
+            [E\ContactListEntry::TYPE_EMAIL, 'siciarek@wp.pl',],
+            [E\ContactListEntry::TYPE_EMAIL, 'siciarek@wp.pl',],
+            [E\ContactListEntry::TYPE_EMAIL, 'siciarek@wp.pl',],
+            [E\ContactListEntry::TYPE_EMAIL, 'siciarek@wp.pl',],
+            [E\ContactListEntry::TYPE_EMAIL, 'siciarek@wp.pl',],
+            [E\ContactListEntry::TYPE_EMAIL, 'siciarek@wp.pl',],
         ];
     }
 
@@ -70,6 +72,20 @@ class ContactListTest extends TestCase
             [$owner, ' ', 'http://siciarek.pl',],
             [$owner, '-', 'http://siciarek.pl',],
             [$owner, 'www', 'http://siciarek.pl',],
+        ];
+    }
+
+    public static function addValidationFailsProvider()
+    {
+        $owner = new DummyContactable();
+
+        return [
+            [$owner, E\ContactListEntry::TYPE_EMAIL,    null, 'Invalid email: '],
+            [$owner, E\ContactListEntry::TYPE_PHONE,    null, 'Invalid phone number: '],
+            [$owner, E\ContactListEntry::TYPE_FACEBOOK, null, 'Invalid facebook identifier: '],
+            [$owner, E\ContactListEntry::TYPE_EMAIL, 'siciarek@example.com', 'Invalid email: '],
+            [$owner, E\ContactListEntry::TYPE_PHONE, '+4860317', 'Invalid phone number: '],
+            [$owner, E\ContactListEntry::TYPE_FACEBOOK, 'penis', 'Invalid facebook identifier: '],
         ];
     }
 
@@ -99,6 +115,19 @@ class ContactListTest extends TestCase
     public function testAddNotOk($owner, $type, $value)
     {
         $this->srv->add($owner, $type, $value);
+    }
+
+    /**
+     * @dataProvider addValidationFailsProvider
+     */
+    public function testAddValidationFailsOk($owner, $type, $value, $exceptionMessagePrefix)
+    {
+        try {
+            $this->srv->add($owner, $type, $value);
+            $this->fail('Method call should throw an exception');
+        } catch (Exceptions\ContactListEntry $exception) {
+            $this->assertEquals($exceptionMessagePrefix . $value, $exception->getMessage());
+        }
     }
 
     public function testAddOk()

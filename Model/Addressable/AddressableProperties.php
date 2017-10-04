@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait AddressableProperties
 {
     /**
-     * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\AddressBook")
+     * @ORM\OneToOne(targetEntity="Siciarek\SymfonyCommonBundle\Entity\AddressBook", cascade={"persist"})
      */
     protected $addressBook;
 }

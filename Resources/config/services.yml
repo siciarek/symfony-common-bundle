@@ -20,16 +20,19 @@ services:
         class: Siciarek\SymfonyCommonBundle\Services\Model\ContactList
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@scb.utils_filter'
 
     scb.model_address_book:
         class: Siciarek\SymfonyCommonBundle\Services\Model\AddressBook
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@scb.utils_filter'
 
     scb.model_document_folder:
         class: Siciarek\SymfonyCommonBundle\Services\Model\DocumentFolder
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@scb.utils_filter'
 
     Siciarek\SymfonyCommonBundle\Model\TimestampableOnCreate\EventListener:
         tags:

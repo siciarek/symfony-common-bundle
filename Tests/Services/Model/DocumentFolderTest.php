@@ -9,11 +9,13 @@
 namespace Siciarek\SymfonyCommonBundle\Tests\Services\Model;
 
 use Siciarek\SymfonyCommonBundle\Services\Model\DocumentFolder;
+use Siciarek\SymfonyCommonBundle\Services\Model\Exceptions\Document;
+use Siciarek\SymfonyCommonBundle\Tests\Model\DummyEntity\DummyDocumentable;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Entity as E;
 
 /**
- * Class ContactListTest
+ * Class DocumentFolderTest
  * @package Siciarek\SymfonyCommonBundle\Tests\Services\Model\
  *
  * @group service
@@ -44,11 +46,57 @@ class DocumentFolderTest extends TestCase
         $this->assertInstanceOf($class, $this->srv);
     }
 
-    public function testAdd()
+    public static function addOkProvider()
     {
-        $condition = $this->srv->add();
+        $owner = new DummyDocumentable();
+        $filename = '/tmp/dummy.file.dat';
+        $content = 'Hello, World!';
+        file_put_contents($filename, $content);
+        return [
+            [$owner, $filename, null],
+            [$owner, $filename, 'New Document'],
+        ];
+    }
+
+    public static function addNotOkProvider()
+    {
+        $owner = new DummyDocumentable();
+
+        return [
+            [$owner, '/tmp/nonexiting.file.dat', null, 'Invalid path: /tmp/nonexiting.file.dat'],
+        ];
+    }
+
+    /**
+     * @dataProvider addOkProvider
+     */
+    public function testAddOk($owner, $pathToFile, $title)
+    {
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em->persist($owner);
+        $em->flush();
+
+        $condition = $this->srv->add($owner, $pathToFile, $title);
 
         $this->assertTrue($condition);
+    }
+
+    /**
+     * @dataProvider addNotOkProvider
+     */
+    public function testAddNotOk($owner, $pathToFile, $title, $exceptionMessage)
+    {
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em->persist($owner);
+        $em->flush();
+
+        try {
+            $this->srv->add($owner, $pathToFile, $title);
+            $this->fail('Exception should be thrown.');
+        }
+        catch(Document $exception) {
+            $this->assertEquals($exceptionMessage, $exception->getMessage());
+        }
     }
 
     public function setUp()

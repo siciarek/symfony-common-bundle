@@ -22,6 +22,8 @@ class Address
     const TYPE_INVOICE = 'invoice';
     const TYPE_DELIVERY = 'delivery';
 
+    const TYPE_DEFAULT = self::TYPE_CORRESPONDENCE;
+
     const AVAILABLE_TYPES = [
         self::TYPE_GENERAL,
         self::TYPE_CORRESPONDENCE,
@@ -67,7 +69,7 @@ class Address
      * @ORM\Column()
      * @var string
      */
-    private $type = self::TYPE_GENERAL;
+    private $type = self::TYPE_DEFAULT;
 
     /**
      * @ORM\Column(nullable=true)

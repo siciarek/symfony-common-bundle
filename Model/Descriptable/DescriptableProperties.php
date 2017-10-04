@@ -23,10 +23,4 @@ trait DescriptableProperties
      * @var string
      */
     protected $description;
-
-    /**
-     * @ORM\Column(length=1024, nullable=true)
-     * @var string
-     */
-    protected $info;
 }

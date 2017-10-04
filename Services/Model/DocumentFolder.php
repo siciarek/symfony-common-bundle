@@ -41,11 +41,10 @@ class DocumentFolder
      * @param string $pathToFile path to file
      * @param null|string $title document title
      * @param null $description
-     * @param null $info
      * @return bool returns true if operation succeed false otherwise
      * @throws Exceptions\Document
      */
-    public function add(DocumentableInterface $owner, $pathToFile, $title = null, $description = null, $info = null)
+    public function add(DocumentableInterface $owner, $pathToFile, $title = null, $description = null)
     {
         # File path validation:
         $pathToFile = $this->filter->sanitize($pathToFile, [FilterInterface::TRIM, FilterInterface::NULL]);
@@ -78,7 +77,6 @@ class DocumentFolder
         $document->setSize($size);
         $document->setMimeType($mimeType);
         $document->setDescription($description);
-        $document->setInfo($info);
 
         $this->entityManager->persist($document);
         $this->entityManager->flush();

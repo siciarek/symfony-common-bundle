@@ -38,28 +38,4 @@ trait DescriptableMethods
     {
         return $this->description;
     }
-
-    /**
-     * Set info
-     *
-     * @param string $info
-     *
-     * @return $this
-     */
-    public function setInfo($info)
-    {
-        $this->info = $info;
-
-        return $this;
-    }
-
-    /**
-     * Get info
-     *
-     * @return string
-     */
-    public function getInfo()
-    {
-        return $this->info;
-    }
 }

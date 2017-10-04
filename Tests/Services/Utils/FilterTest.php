@@ -84,6 +84,11 @@ TXT;
 
 
         return [
+
+            [Filter::FACEBOOK_IDENTIFIER, '', null, true],
+            [Filter::FACEBOOK_IDENTIFIER, 'penis', null, true],
+            [Filter::FACEBOOK_IDENTIFIER, 'JacekSiciarek', 'JacekSiciarek', true],
+
             # Valid PL:
             [Filter::PHONE_NUMBER, '048603173114', '+48603173114', true],
             [Filter::PHONE_NUMBER, '048 603 173 114', '+48603173114', true],

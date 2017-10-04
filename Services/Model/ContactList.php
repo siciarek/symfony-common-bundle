@@ -11,6 +11,7 @@ namespace Siciarek\SymfonyCommonBundle\Services\Model;
 use Doctrine\ORM\EntityManagerInterface;
 use Siciarek\SymfonyCommonBundle\Model\Contactable\ContactableInterface;
 use Siciarek\SymfonyCommonBundle\Entity as E;
+use Siciarek\SymfonyCommonBundle\Services\Utils\FilterInterface;
 
 class ContactList
 {
@@ -19,13 +20,18 @@ class ContactList
      * @var EntityManagerInterface
      */
     protected $entityManager;
+    /**
+     * @var FilterInterface
+     */
+    protected $filter;
 
     /**
      * ContactList constructor.
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, FilterInterface $filter)
     {
         $this->entityManager = $entityManager;
+        $this->filter = $filter;
     }
 
     /**
@@ -36,19 +42,34 @@ class ContactList
      * @param bool $strict if true strict value validation is processed
      * @throws Exceptions\ContactListEntry
      */
-    public function validate($type, $value, $strict = false)
+    public function validate($type, $value, $strict = true)
     {
+        if($value === null) {
+            return null;
+        }
+
         switch ($type) {
             case E\ContactListEntry::TYPE_EMAIL:
-                # TODO: validate value if not valid - throw new Exceptions\ContactList('Invalid email: ' . $value);
+                $value = $this->filter->sanitize($value, [FilterInterface::EMAIL], $strict);
+                if(null === $value) {
+                    throw new Exceptions\ContactListEntry('Invalid email: ' . $value);
+                }
                 break;
             case E\ContactListEntry::TYPE_PHONE:
-                # TODO: validate value if not valid - throw new Exceptions\ContactList('Invalid phone number: ' . $value);
+                $value = $this->filter->sanitize($value, [FilterInterface::PHONE_NUMBER], $strict);
+                if(null === $value) {
+                    throw new Exceptions\ContactListEntry('Invalid phone number: ' . $value);
+                }
                 break;
             case E\ContactListEntry::TYPE_FACEBOOK:
-                # TODO: validate value if not valid - throw new Exceptions\ContactList('Invalid facebook identifier: ' . $value);
+                $value = $this->filter->sanitize($value, [FilterInterface::FACEBOOK_IDENTIFIER], $strict);
+                if(null === $value) {
+                    throw new Exceptions\ContactListEntry('Invalid facebook identifier: ' . $value);
+                }
                 break;
         }
+
+        return $value;
     }
 
     /**
@@ -61,7 +82,7 @@ class ContactList
      * @return bool returns if operation succeed
      * @throws Exceptions\ContactListEntry
      */
-    public function add(ContactableInterface $owner, $type, $value, $strict = false)
+    public function add(ContactableInterface $owner, $type, $value, $strict = true)
     {
         # Sanitize data:
         $type = trim($type);

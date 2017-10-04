@@ -13,43 +13,8 @@ use Symfony\Component\Validator\Validation;
  * Class Filter
  * @package Siciarek\SymfonyCommonBundle\Services\Utils
  */
-class Filter
+class Filter implements FilterInterface
 {
-    const ALPHANUM = 'alphanum';
-    const ASCII = 'ascii';
-    const EMAIL = 'email';
-    const FLOAT = 'float';
-    const INT = 'int';
-    const IP4 = 'ip4';
-    const IP6 = 'ip6';
-    const LOWER = 'lower';
-    const NORMALIZE = 'normalize';
-    const NOSPACE = 'nospace';
-    const NULL = 'null';
-    const PHONE_NUMBER = 'phone_number';
-    const STRING = 'string';
-    const TRIM = 'trim';
-    const UPPER = 'upper';
-
-
-    const FILTERS = [
-        self::ALPHANUM,
-        self::ASCII,
-        self::EMAIL,
-        self::FLOAT,
-        self::INT,
-        self::IP4,
-        self::IP6,
-        self::LOWER,
-        self::NORMALIZE,
-        self::NOSPACE,
-        self::NULL,
-        self::PHONE_NUMBER,
-        self::STRING,
-        self::TRIM,
-        self::UPPER,
-    ];
-
     /**
      * @var array
      */
@@ -77,12 +42,12 @@ class Filter
     }
 
     /**
-     * Applies filter on value.
+     * Applies filters on value.
      *
      * @param string $value
-     * @param string|array $filters
+     * @param string|array $filters array of filters or filter string
      * @param bool $strict set on deeper validation.
-     * @return null|string
+     * @return null|string sanitized value or null if value is not valid
      * @throws Exceptions\Filter
      */
     public function sanitize($value, $filters, $strict = true)
@@ -119,6 +84,38 @@ class Filter
         }
 
         switch ($filter) {
+            case self::FACEBOOK_IDENTIFIER:
+
+                $value = $this->sanitize($value, [self::TRIM, self::NULL]);
+
+                if($value === null) {
+                    return null;
+                }
+
+                $url = sprintf('https://facebook.com/%s', $value);
+
+                $userAgent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
+
+                $opts = [
+                    CURLOPT_USERAGENT => $userAgent,
+                    CURLOPT_URL => $url,
+                    CURLOPT_HTTPGET => true,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_FOLLOWLOCATION => true,
+                ];
+
+                $ch = curl_init();
+                curl_setopt_array($ch, $opts);
+                curl_exec($ch);
+                $info = curl_getinfo($ch);
+                curl_close($ch);
+
+                if($info['http_code'] !== 200) {
+                    return null;
+                }
+
+                return $value;
+
             case self::ASCII:
                 $value = transliterator_transliterate('Any-Latin; Latin-ASCII', $value);
 
@@ -203,7 +200,7 @@ class Filter
                 $prefix = mb_substr($value, 0, 1);
 
                 # 048603173114
-                if($prefix !== '+') {
+                if ($prefix !== '+') {
                     $value = preg_replace('/^\D*0\D*/', '', $value);
                 }
 

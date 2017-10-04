@@ -2,9 +2,10 @@
 
 namespace Siciarek\SymfonyCommonBundle\Services\Utils;
 
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberFormat;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Filter service
@@ -23,39 +24,56 @@ class Filter
     const IP6 = 'ip6';
     const LOWER = 'lower';
     const NORMALIZE = 'normalize';
+    const NOSPACE = 'nospace';
     const NULL = 'null';
+    const PHONE_NUMBER = 'phone_number';
     const STRING = 'string';
     const TRIM = 'trim';
     const UPPER = 'upper';
 
+
     const FILTERS = [
-        self::ALPHANUM => true,
-        self::ASCII => true,
-        self::EMAIL => true,
-        self::FLOAT => true,
-        self::INT => true,
-        self::IP4 => true,
-        self::IP6 => true,
-        self::LOWER => true,
-        self::NORMALIZE => true,
-        self::NULL => true,
-        self::STRING => true,
-        self::TRIM => true,
-        self::UPPER => true,
+        self::ALPHANUM,
+        self::ASCII,
+        self::EMAIL,
+        self::FLOAT,
+        self::INT,
+        self::IP4,
+        self::IP6,
+        self::LOWER,
+        self::NORMALIZE,
+        self::NOSPACE,
+        self::NULL,
+        self::PHONE_NUMBER,
+        self::STRING,
+        self::TRIM,
+        self::UPPER,
     ];
 
     /**
-     * @var ValidatorInterface
+     * @var array
      */
-    protected $validator;
+    protected $options;
 
     /**
      * Filter constructor.
-     * @param ValidatorInterface $validator
+     * @param array $options
      */
-    public function __construct(ValidatorInterface $validator)
+    public function __construct(array $options = [])
     {
-        $this->validator = $validator;
+        $this->options = $options;
+
+        if ($options === []) {
+            $this->options = [
+                self::EMAIL => [
+                    'lowercase' => true,
+                ],
+                self::PHONE_NUMBER => [
+                    'defaultRegion' => 'PL',
+                    'numberFormat' => PhoneNumberFormat::E164,
+                ],
+            ];
+        }
     }
 
     /**
@@ -63,21 +81,20 @@ class Filter
      *
      * @param string $value
      * @param string|array $filters
+     * @param bool $strict set on deeper validation.
      * @return null|string
      * @throws Exceptions\Filter
      */
     public function sanitize($value, $filters, $strict = true)
     {
-        $filters = (array)$filters;
-
-        $filters = array_filter($filters);
+        $filters = array_filter((array)$filters);
 
         if (count($filters) === 0) {
             throw new Exceptions\Filter('No filter given.');
         }
 
         foreach ($filters as $filter) {
-            if (!array_key_exists($filter, self::FILTERS)) {
+            if (false === in_array($filter, self::FILTERS)) {
                 throw new Exceptions\Filter('No such filter: "'.$filter.'".');
             }
 
@@ -92,6 +109,7 @@ class Filter
      *
      * @param string $value
      * @param string $filter
+     * @param bool $strict set on deeper validation.
      * @return mixed|string
      */
     public function applyFilter($value, $filter, $strict = true)
@@ -171,11 +189,56 @@ class Filter
 
                 return $value;
 
-            case self::EMAIL:
-                $value = filter_var($value, FILTER_SANITIZE_EMAIL);
-                $value = $this->sanitize($value, self::LOWER);
+            case self::NOSPACE:
+                $value = str_replace('\xc2\xa0', ' ', $value);
+                $value = preg_replace('/\s+/', '', $value);
 
-                $violations = $this->validator->validate($value, [
+                return $value;
+
+            case self::PHONE_NUMBER:
+
+                $options = $this->options[$filter];
+
+                $value = trim($value);
+                $prefix = mb_substr($value, 0, 1);
+
+                # 048603173114
+                if($prefix !== '+') {
+                    $value = preg_replace('/^\D*0\D*/', '', $value);
+                }
+
+                $phoneNumberUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+
+                try {
+                    $phoneNumberObject = $phoneNumberUtil->parse($value, $options['defaultRegion']);
+                } catch (NumberParseException $exception) {
+                    return null;
+                }
+
+                if (false === $phoneNumberUtil->isPossibleNumber($phoneNumberObject)) {
+                    return null;
+                }
+
+                if ((int)$phoneNumberObject->getNationalNumber() === 0) {
+                    return null;
+                }
+
+                $value = $phoneNumberUtil->format($phoneNumberObject, $options['numberFormat']);
+
+                return $value;
+
+            case self::EMAIL:
+                $options = $this->options[$filter];
+
+                $value = filter_var($value, FILTER_SANITIZE_EMAIL);
+
+                if (true === $options['lowercase']) {
+                    $value = $this->sanitize($value, self::LOWER);
+                }
+
+                $validator = Validation::createValidator();
+
+                $violations = $validator->validate($value, [
                     new Email(['strict' => $strict, 'checkMX' => $strict]),
                 ]);
 

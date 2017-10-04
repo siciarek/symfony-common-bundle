@@ -163,7 +163,6 @@ class UrlTest extends TestCase
         $this->srv->parse($url);
     }
 
-
     /**
      * @expectedException \Siciarek\SymfonyCommonBundle\Services\Net\Exceptions\InvalidUrl
      * @expectedExceptionMessage No IPv4 address corresponding to a given Internet host name.

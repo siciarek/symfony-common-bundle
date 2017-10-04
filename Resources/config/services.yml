@@ -3,7 +3,12 @@ services:
     scb.utils_filter:
         class: Siciarek\SymfonyCommonBundle\Services\Utils\Filter
         arguments:
-            - '@validator'
+            -
+                email:
+                    lowercase: true
+                phone_number:
+                    defaultRegion: 'PL'
+                    numberFormat: !libphonenumber\PhoneNumberFormat::E164
 
     scb.net_url:
         class: Siciarek\SymfonyCommonBundle\Services\Net\Url

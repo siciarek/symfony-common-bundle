@@ -84,47 +84,89 @@ TXT;
 
 
         return [
-            [[Filter::EMAIL], '    SiCiareK@gmail.com       ', 'siciarek@gmail.com'],
-            [Filter::EMAIL, '    siciarek@gmail.com       ', 'siciarek@gmail.com'],
-            [Filter::EMAIL, '    sici arek@gmail.com       ', 'siciarek@gmail.com'],
-            [Filter::EMAIL, '    sici arek@gm a i l.com       ', 'siciarek@gmail.com'],
-            [Filter::EMAIL, 'siciarek@gmail.com', 'siciarek@gmail.com'],
-            [Filter::EMAIL, 'sici@arek@gmail.com', null],
+            # Valid PL:
+            [Filter::PHONE_NUMBER, '048603173114', '+48603173114', true],
+            [Filter::PHONE_NUMBER, '048 603 173 114', '+48603173114', true],
+            [Filter::PHONE_NUMBER, '48603173114', '+48603173114', true],
+            [Filter::PHONE_NUMBER, '+48603173114', '+48603173114', true],
+            [Filter::PHONE_NUMBER, '603173114', '+48603173114', true],
+            [Filter::PHONE_NUMBER, '603 173 114', '+48603173114', true],
+            [Filter::PHONE_NUMBER, '603-173-114', '+48603173114', true],
+            [Filter::PHONE_NUMBER, '603.173.114', '+48603173114', true],
+            [Filter::PHONE_NUMBER, '58 621 09 43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '58 621-09-43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '58 62-10-943', '+48586210943', true],
 
-            [Filter::EMAIL, 'siciarek2gmail.com', null],
-            [Filter::EMAIL, 'siciarek#gmail.com', null],
-            [Filter::EMAIL, 'siciarek@sqlmkalkdo.com', null],
-            [Filter::EMAIL, 'siciarek@m.com', null],
+            [Filter::PHONE_NUMBER, '(58) 621-09-43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '[58] 621-09-43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '/58/ 621-09-43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '(+4858) 621-09-43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '(058) 621-09-43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '058 621-09-43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '058 621-09-43', '+48586210943', true],
+            [Filter::PHONE_NUMBER, '0-58 621-09-43', '+48586210943', true],
 
-            [Filter::STRING, '<p>Zażółć <strong>gęślą</strong> jaźń!</p>', 'Zażółć gęślą jaźń!'],
+            # Valid international:
+            [Filter::PHONE_NUMBER, '+380988651455', '+380988651455', true],
+            [Filter::PHONE_NUMBER, '+491754812222', '+491754812222', true],
 
-            [Filter::NORMALIZE, $text, 'Pierwszy jeden drugi Zażółć gęślą jaźń. trzeci czwarty ostatni'],
+            # Invalid:
+            [Filter::PHONE_NUMBER, '', null, true],
+            [Filter::PHONE_NUMBER, '-', null, true],
+            [Filter::PHONE_NUMBER, 'brak', null, true],
+            [Filter::PHONE_NUMBER, '0', null, true],
+            [Filter::PHONE_NUMBER, '000-000-000', null, true],
+            [Filter::PHONE_NUMBER, '+48000-000-000', null, true],
+            [Filter::PHONE_NUMBER, '+486', null, true],
+            [Filter::PHONE_NUMBER, '+4860', null, true],
+            [Filter::PHONE_NUMBER, '+48603', null, true],
+            [Filter::PHONE_NUMBER, '+486031', null, true],
+            [Filter::PHONE_NUMBER, '+4860317', null, true],
 
-            [Filter::INT, 'A4', null],
-            [Filter::INT, '4A', 4],
-            [Filter::INT, '  2 345', 2345],
-            [Filter::INT, '  2 345.00', 2345],
-            [Filter::FLOAT, '  2 345.45', 2345.45],
-            [Filter::FLOAT, '  X2 345.45', null],
-            [Filter::FLOAT, '  2 345.45X', 2345.45],
+            # Valid:
+            [Filter::EMAIL, '    SiCiareK@gmail.com       ', 'siciarek@gmail.com', true],
+            [Filter::EMAIL, '    siciarek@gmail.com       ', 'siciarek@gmail.com', true],
+            [Filter::EMAIL, '    sici arek@gmail.com       ', 'siciarek@gmail.com', true],
+            [Filter::EMAIL, '    sici arek@gm a i l.com       ', 'siciarek@gmail.com', true],
+            [Filter::EMAIL, 'siciarek@gmail.com', 'siciarek@gmail.com', true],
+            [Filter::EMAIL, 'sici@arek@gmail.com', null, true],
 
-            [Filter::NULL, null, null],
-            [Filter::NULL, '   ', null],
-            [[Filter::NULL], '   ', null],
+            # Invalid:
+            [Filter::EMAIL, 'siciarek2gmail.com', null, true],
+            [Filter::EMAIL, 'siciarek#gmail.com', null, true],
+            [Filter::EMAIL, 'siciarek@sqlmkalkdo.com', null, true],
+            [Filter::EMAIL, 'siciarek@m.com', null, true],
 
-            [Filter::TRIM, '    siciarek@gmail.com       ', 'siciarek@gmail.com'],
-            [Filter::ASCII, 'Zażółć gęślą jaźń', 'Zazolc gesla jazn'],
+            [Filter::NOSPACE, '        Zażółć gęślą jąźń           !           ', 'Zażółćgęśląjąźń!', true],
 
-            [Filter::LOWER, 'ZAŻÓŁĆ GĘŚLĄ JAŹŃ', 'zażółć gęślą jaźń'],
-            [Filter::UPPER, 'zażółć gęślą jaźń', 'ZAŻÓŁĆ GĘŚLĄ JAŹŃ'],
+            [Filter::STRING, '<p>Zażółć <strong>gęślą</strong> jaźń!</p>', 'Zażółć gęślą jaźń!', true],
 
-            [Filter::ALPHANUM, 'zażółć gęślą jaźń 4', 'zaglja4'],
+            [Filter::NORMALIZE, $text, 'Pierwszy jeden drugi Zażółć gęślą jaźń. trzeci czwarty ostatni', true],
 
-            [Filter::IP4, '127.0.0.1', '127.0.0.1'],
-            [Filter::IP4, '327.0.0.1', null],
+            [Filter::INT, 'A4', null, true],
+            [Filter::INT, '4A', 4, true],
+            [Filter::INT, '  2 345', 2345, true],
+            [Filter::INT, '  2 345.00', 2345, true],
+            [Filter::FLOAT, '  2 345.45', 2345.45, true],
+            [Filter::FLOAT, '  X2 345.45', null, true],
+            [Filter::FLOAT, '  2 345.45X', 2345.45, true],
 
-            [Filter::IP6, '2001:db8:a0b:12f0::1', '2001:db8:a0b:12f0::1'],
-            [Filter::IP6, '32001:db8:a0b:12f0::1', null],
+            [Filter::NULL, null, null, true],
+            [Filter::NULL, '   ', null, true],
+
+            [Filter::TRIM, '    siciarek@gmail.com       ', 'siciarek@gmail.com', true],
+            [Filter::ASCII, 'Zażółć gęślą jaźń', 'Zazolc gesla jazn', true],
+
+            [Filter::LOWER, 'ZAŻÓŁĆ GĘŚLĄ JAŹŃ', 'zażółć gęślą jaźń', true],
+            [Filter::UPPER, 'zażółć gęślą jaźń', 'ZAŻÓŁĆ GĘŚLĄ JAŹŃ', true],
+
+            [Filter::ALPHANUM, 'zażółć gęślą jaźń 4', 'zaglja4', true],
+
+            [Filter::IP4, '127.0.0.1', '127.0.0.1', true],
+            [Filter::IP4, '327.0.0.1', null, true],
+
+            [Filter::IP6, '2001:db8:a0b:12f0::1', '2001:db8:a0b:12f0::1', true],
+            [Filter::IP6, '32001:db8:a0b:12f0::1', null, true],
 
         ];
     }
@@ -136,11 +178,30 @@ TXT;
      * @param null|string $value
      * @param null|string $expected
      */
-    public function testSanitizeOk($filter, $value, $expected)
+    public function testSanitizeOk($filter, $value, $expected, $strict)
     {
-        $this->srv = new Filter($this->getContainer()->get('validator'), $this->getContainer()->get('translator'));
+        $this->srv = new Filter();
 
-        $actual = $this->srv->sanitize($value, $filter);
+        $actual = $this->srv->sanitize($value, $filter, $strict);
+
+        if ($expected !== $actual) {
+            file_put_contents('temp.expected.dat', $expected);
+            file_put_contents('temp.actual.dat', $actual);
+        }
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @dataProvider sanitizeOkProvider
+     *
+     * @param string|array $filter
+     * @param null|string $value
+     * @param null|string $expected
+     */
+    public function testApplyFilterOk($filter, $value, $expected, $strict)
+    {
+        $actual = $this->srv->applyFilter($value, $filter, $strict);
 
         if ($expected !== $actual) {
             file_put_contents('temp.expected.dat', $expected);

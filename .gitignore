@@ -1,15 +1,16 @@
 # Custom
-.idea
-composer.phar
-phpunit.phar
-composer.lock
-/temp.*
-/build
-/temp
-/bin
-/vendor
-/app
-/var
+/.idea
+/composer.phar
+/phpunit.phar
+/composer.lock
 /phpunit.xml
 /build.xml
 /properties.conf
+/.web-server-pid
+/temp.*
+/temp/
+/bin/
+/vendor/
+/app/
+/var/
+/web/

@@ -4,6 +4,7 @@ namespace Siciarek\SymfonyCommonBundle\Form;
 
 use Knp\DoctrineBehaviors\ORM\Geocodable\Type\Point;
 use Siciarek\SymfonyCommonBundle\Entity\Address;
+use Symfony\Bridge\Doctrine\Tests\Fixtures\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,6 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Type;
 
 
 class AddressType extends AbstractType

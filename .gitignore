@@ -15,5 +15,5 @@
 /var/
 /web/
 /Controller
-/Resources/views/
+/Resources/views/Default/
 !/Resources/views/form/fields.html.twig

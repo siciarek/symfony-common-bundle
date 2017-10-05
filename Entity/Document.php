@@ -16,21 +16,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Document
 {
+    const TYPE_FILE = 'file';
+    const TYPE_REFERENCE = 'reference';
+
+    const DEFAULT_TYPE = self::TYPE_FILE;
     const DEFAULT_MIME_TYPE = 'application/octet-stream';
-    const TYPE_FILE_DOCUMENT = 'file_document';
-    const TYPE_FILE_IMAGE = 'file_image';
-    const TYPE_FILE_MEDIA = 'file_media';
-    const TYPE_REFERENCE_DOCUMENT = 'reference_document';
-    const TYPE_REFERENCE_IMAGE = 'reference_image';
-    const TYPE_REFERENCE_MEDIA = 'reference_media';
 
     const AVAILABLE_TYPES = [
-        self::TYPE_FILE_DOCUMENT,
-        self::TYPE_FILE_IMAGE,
-        self::TYPE_FILE_MEDIA,
-        self::TYPE_REFERENCE_DOCUMENT,
-        self::TYPE_REFERENCE_IMAGE,
-        self::TYPE_REFERENCE_MEDIA,
+        self::TYPE_FILE,
+        self::TYPE_REFERENCE,
     ];
 
     use DBBehaviors\Descriptable\Descriptable,
@@ -68,7 +62,7 @@ class Document
     /**
      * @ORM\Column()
      */
-    private $type = self::TYPE_FILE_DOCUMENT;
+    private $type = self::DEFAULT_TYPE;
 
     /**
      * @ORM\Column()
@@ -76,7 +70,7 @@ class Document
     private $mimeType = self::DEFAULT_MIME_TYPE;
 
     /**
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     private $title;
 
@@ -86,10 +80,15 @@ class Document
     private $size = 0;
 
     /**
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      * @Assert\File()
      */
     private $file;
+
+    /**
+     * @ORM\Column(nullable=true)
+     */
+    private $reference;
 
 
     /**

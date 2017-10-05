@@ -34,6 +34,7 @@ class Address
     ];
 
     use DBBehaviors\Descriptable\Descriptable,
+        DBBehaviors\ExtraData\ExtraData,
         ORMBehaviors\Geocodable\Geocodable,
         ORMBehaviors\Sortable\Sortable,
         ORMBehaviors\Blameable\Blameable,
@@ -85,7 +86,6 @@ class Address
      * @ORM\Column()
      */
     private $place;
-
 
     /**
      * Get id

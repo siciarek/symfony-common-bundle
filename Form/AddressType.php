@@ -4,6 +4,7 @@ namespace Siciarek\SymfonyCommonBundle\Form;
 
 use Siciarek\SymfonyCommonBundle\Entity\Address;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -22,10 +23,15 @@ class AddressType extends AbstractType
     {
         $types = array_combine(Address::AVAILABLE_TYPES, Address::AVAILABLE_TYPES);
 
+        if (true === $options['showTypeField']) {
+            $builder
+                ->add('type', ChoiceType::class, [
+                    'trim' => true,
+                    'choices' => $types,
+                ]);
+        }
+
         $builder
-            ->add('type', ChoiceType::class, [
-                'choices' => $types,
-            ])
             ->add('address', TextType::class, [
                 'trim' => true,
                 'constraints' => [
@@ -37,6 +43,7 @@ class AddressType extends AbstractType
                 'trim' => true,
                 'constraints' => [
                     new NotBlank(),
+                    new Length(['min' => 6, 'max' => 6]),
                     new Regex(['pattern' => '/^\d{2}\-\d{3}$/']),
                 ],
             ])
@@ -46,24 +53,40 @@ class AddressType extends AbstractType
                     new NotBlank(),
                 ],
             ])
-            ->add('setUpLocation', CheckboxType::class, [
-                'trim' => true,
-                'data' => false,
-                'required' => false,
-                'mapped' => false,
-            ])
             ->add('description', TextareaType::class, [
+                'required' => false,
                 'trim' => true,
                 'constraints' => [
                     new Length(['min' => 1, 'max' => 255]),
                 ],
+            ])
+            ->add('data', LocationType::class, [
+                'required' => false,
+                'empty_data' => [
+                    'zoom' => 5,
+                    'center' => [
+                        'lat' => 52.069167,
+                        'lon' => 19.480556,
+                    ],
+                    'coords' => [],
+                ],
             ]);
+
+        $builder->get('data')->addModelTransformer(new CallbackTransformer(
+            function ($original) {
+                return json_encode($original, JSON_PRETTY_PRINT);
+            },
+            function ($submitted) {
+                return json_decode($submitted);
+            }
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Address::class,
+            'showTypeField' => false,
         ]);
     }
 }

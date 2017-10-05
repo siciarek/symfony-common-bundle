@@ -1,0 +1,5 @@
+# Twig Configuration
+
+twig:
+    form_themes:
+        - 'form/fields.html.twig'

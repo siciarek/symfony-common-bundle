@@ -1,0 +1,38 @@
+{# Resources/views/form/fields.html.twig #}
+
+{% block location_widget %}
+    {% spaceless %}
+
+        {{ form_errors(form) }}
+
+        {{ form_row(form) }}
+
+        {% set selector = form.vars.id~'_map' %}
+
+
+        <div id="{{ selector }}" style="height:100%"></div>
+
+        <style>
+            @import 'https://openlayers.org/en/v4.3.4/css/ol.css';
+        </style>
+        <script src="//openlayers.org/api/OpenLayers.js"></script>
+        <script src="{{ asset('bundles/siciareksymfonycommon/js/location-map.js') }}"></script>
+
+        <script>
+          var callback = function (value) {
+            if (value !== null) {
+              document.getElementById('{{ form.vars.id }}').setAttribute('value', JSON.stringify(value));
+            }
+          };
+
+          var {{ selector }}_initialState = {{ (form.vars.data == '[]' ? form.vars.attr['data-content'] : form.vars.data)|raw }};
+
+          document.addEventListener('DOMContentLoaded', function (event) {
+            var storage = new MapStateStorage(callback, {{ selector }}_initialState);
+            new Map(storage, '{{ selector }}', true);
+          });
+
+        </script>
+
+    {% endspaceless %}
+{% endblock %}

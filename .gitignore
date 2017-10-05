@@ -16,3 +16,4 @@
 /web/
 /Controller
 /Resources/views/
+!/Resources/views/form/fields.html.twig

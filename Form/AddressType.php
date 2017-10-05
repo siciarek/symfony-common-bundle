@@ -2,14 +2,16 @@
 
 namespace Siciarek\SymfonyCommonBundle\Form;
 
+use Knp\DoctrineBehaviors\ORM\Geocodable\Type\Point;
 use Siciarek\SymfonyCommonBundle\Entity\Address;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Validator\Constraints\Length;
@@ -22,6 +24,15 @@ class AddressType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $types = array_combine(Address::AVAILABLE_TYPES, Address::AVAILABLE_TYPES);
+
+        $data = [
+            'zoom' => 5,
+            'center' => [
+                'lat' => 52.069167,
+                'lon' => 19.480556,
+            ],
+            'coords' => [],
+        ];
 
         if (true === $options['showTypeField']) {
             $builder
@@ -61,20 +72,33 @@ class AddressType extends AbstractType
                 ],
             ])
             ->add('data', LocationType::class, [
+                'label' => 'Location',
                 'required' => false,
-                'empty_data' => [
-                    'zoom' => 5,
-                    'center' => [
-                        'lat' => 52.069167,
-                        'lon' => 19.480556,
-                    ],
-                    'coords' => [],
+                'empty_data' => $data,
+                'attr' => [
+                      'data-content' => json_encode($data),
                 ],
-            ]);
+            ])
+            ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+                $obj = $event->getForm()->getData();
+                $data = $obj->getData();
+
+                if (isset($data->coords[0])) {
+                    $coords = $data->coords[0];
+                    $location = new Point($coords->lat, $coords->lon);
+                    $obj->setLocation($location);
+                }
+                else {
+                    $obj->setData(null);
+                    $obj->setLocation(null);
+                }
+
+                $event->setData($obj);
+            });
 
         $builder->get('data')->addModelTransformer(new CallbackTransformer(
             function ($original) {
-                return json_encode($original, JSON_PRETTY_PRINT);
+                return json_encode($original);
             },
             function ($submitted) {
                 return json_decode($submitted);

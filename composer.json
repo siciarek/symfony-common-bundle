@@ -37,9 +37,11 @@
         "symfony/web-server-bundle": "^3.3"
     },
     "autoload": {
-        "psr-4": {
-            "Siciarek\\SymfonyCommonBundle\\": "",
+        "psr-0": {
             "": "app"
+        },
+        "psr-4": {
+            "Siciarek\\SymfonyCommonBundle\\": ""
         }
     }
 }

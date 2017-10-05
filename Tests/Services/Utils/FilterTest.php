@@ -85,9 +85,14 @@ TXT;
 
         return [
 
+            [Filter::SLUG, 'cv.programmer.en.odt', 'cv.programmer.en.odt', true],
+            [Filter::SLUG, null, null, true],
+            [Filter::SLUG, 'Zażółć Gęślą Jaźń', 'zazolc-gesla-jazn', true],
+
             [Filter::FACEBOOK_IDENTIFIER, '', null, true],
             [Filter::FACEBOOK_IDENTIFIER, 'penis', null, true],
-            [Filter::FACEBOOK_IDENTIFIER, 'JacekSiciarek', 'JacekSiciarek', true],
+            [Filter::FACEBOOK_IDENTIFIER, 'JacekSiciarek', 'JacekSiciarek', false],
+            [Filter::FACEBOOK_IDENTIFIER, 'JacekSiciarek', 'jacek.siciarek', true],
 
             # Valid PL:
             [Filter::PHONE_NUMBER, '048603173114', '+48603173114', true],

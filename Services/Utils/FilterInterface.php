@@ -24,6 +24,7 @@ interface FilterInterface
     const NOSPACE = 'nospace';
     const NULL = 'null';
     const PHONE_NUMBER = 'phone_number';
+    const SLUG = 'slug';
     const STRING = 'string';
     const TRIM = 'trim';
     const UPPER = 'upper';
@@ -42,6 +43,7 @@ interface FilterInterface
         self::NOSPACE,
         self::NULL,
         self::PHONE_NUMBER,
+        self::SLUG,
         self::STRING,
         self::TRIM,
         self::UPPER,

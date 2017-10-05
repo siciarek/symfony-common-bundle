@@ -12,6 +12,8 @@ services:
         class: Siciarek\SymfonyCommonBundle\Services\Utils\Filter
         arguments:
             -
+                slug:
+                    separator: '-'
                 email:
                     lowercase: true
                 phone_number:

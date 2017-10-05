@@ -26,19 +26,21 @@ class Filter implements FilterInterface
      */
     public function __construct(array $options = [])
     {
-        $this->options = $options;
 
-        if ($options === []) {
-            $this->options = [
-                self::EMAIL => [
-                    'lowercase' => true,
-                ],
-                self::PHONE_NUMBER => [
-                    'defaultRegion' => 'PL',
-                    'numberFormat' => PhoneNumberFormat::E164,
-                ],
-            ];
-        }
+        $defaults = [
+            self::SLUG => [
+                'separator' => '-',
+            ],
+            self::EMAIL => [
+                'lowercase' => true,
+            ],
+            self::PHONE_NUMBER => [
+                'defaultRegion' => 'PL',
+                'numberFormat' => PhoneNumberFormat::E164,
+            ],
+        ];
+
+        $this->options = array_merge($defaults, $options);
     }
 
     /**
@@ -84,11 +86,19 @@ class Filter implements FilterInterface
         }
 
         switch ($filter) {
+            case self::SLUG:
+                $options = $this->options[$filter];
+
+                $value = $this->sanitize($value, [self::NORMALIZE, self::ASCII, self::LOWER]);
+                $value = preg_replace('/\s+/', $options['separator'], $value);
+
+                return $value;
+
             case self::FACEBOOK_IDENTIFIER:
 
                 $value = $this->sanitize($value, [self::TRIM, self::NULL]);
 
-                if($value === null) {
+                if ($value === null) {
                     return null;
                 }
 
@@ -110,8 +120,13 @@ class Filter implements FilterInterface
                 $info = curl_getinfo($ch);
                 curl_close($ch);
 
-                if($info['http_code'] !== 200) {
+                if ($info['http_code'] !== 200) {
                     return null;
+                }
+
+                if(true === $strict) {
+                    $temp = explode('/', $info['url']);
+                    $value = end($temp);
                 }
 
                 return $value;

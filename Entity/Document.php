@@ -81,6 +81,11 @@ class Document
 
     /**
      * @ORM\Column(nullable=true)
+     */
+    private $extension;
+
+    /**
+     * @ORM\Column(nullable=true)
      * @Assert\File()
      */
     private $file;
@@ -89,7 +94,6 @@ class Document
      * @ORM\Column(nullable=true)
      */
     private $reference;
-
 
     /**
      * Get id
@@ -171,6 +175,30 @@ class Document
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set extension
+     *
+     * @param string $extension
+     *
+     * @return Document
+     */
+    public function setExtension($extension)
+    {
+        $this->extension = $extension;
+
+        return $this;
+    }
+
+    /**
+     * Get extension
+     *
+     * @return string
+     */
+    public function getExtension()
+    {
+        return $this->extension;
     }
 
     /**

@@ -2,20 +2,12 @@
 
 namespace Siciarek\SymfonyCommonBundle\Form;
 
-use Knp\DoctrineBehaviors\ORM\Geocodable\Type\Point;
-use Siciarek\SymfonyCommonBundle\Entity\Address;
 use Siciarek\SymfonyCommonBundle\Entity\ContactListEntry;
-use Symfony\Bridge\Doctrine\Tests\Fixtures\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Symfony\Component\Validator\Constraints as C;
 
 

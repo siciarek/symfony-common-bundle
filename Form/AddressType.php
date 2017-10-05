@@ -25,18 +25,9 @@ class AddressType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $types = array_combine(Address::AVAILABLE_TYPES, Address::AVAILABLE_TYPES);
-
-        $data = [
-            'zoom' => 5,
-            'center' => [
-                'lat' => 52.069167,
-                'lon' => 19.480556,
-            ],
-            'coords' => [],
-        ];
 
         if (true === $options['showTypeField']) {
+            $types = array_combine(Address::AVAILABLE_TYPES, Address::AVAILABLE_TYPES);
             $builder
                 ->add('type', ChoiceType::class, [
                     'trim' => true,
@@ -76,16 +67,17 @@ class AddressType extends AbstractType
             ->add('data', LocationType::class, [
                 'label' => 'Location',
                 'required' => false,
-                'empty_data' => $data,
+                'empty_data' => $options['locationInitConfig'],
                 'attr' => [
-                      'data-content' => json_encode($data),
+                      'data-content' => json_encode($options['locationInitConfig']),
                 ],
             ])
             ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
                 $obj = $event->getForm()->getData();
                 $data = $obj->getData();
 
-                if (isset($data->coords[0])) {
+                if (count($data->coords) > 0) {
+                    $data->coords = [array_pop($data->coords)];
                     $coords = $data->coords[0];
                     $location = new Point($coords->lat, $coords->lon);
                     $obj->setLocation($location);
@@ -113,6 +105,14 @@ class AddressType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Address::class,
             'showTypeField' => false,
+            'locationInitConfig' => [
+                'zoom' => 5,
+                'center' => [
+                    'lat' => 52.069167,
+                    'lon' => 19.480556,
+                ],
+                'coords' => [],
+            ],
         ]);
     }
 }

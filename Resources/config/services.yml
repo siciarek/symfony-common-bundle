@@ -1,5 +1,13 @@
 services:
 
+    Siciarek\SymfonyCommonBundle\Form\DocumentType:
+        arguments:
+            -
+                target_directory: '%document_target_directory%'
+        tags:
+            -
+                form.type
+
     scb.utils_filter:
         class: Siciarek\SymfonyCommonBundle\Services\Utils\Filter
         arguments:

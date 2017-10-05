@@ -57,8 +57,8 @@ class FilterTest extends TestCase
     public static function sanitizeOkProvider()
     {
         $text = <<<TXT
-
-
+    
+                 
 
 
         Pierwszy

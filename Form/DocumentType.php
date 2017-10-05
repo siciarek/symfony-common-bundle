@@ -19,6 +19,16 @@ use Symfony\Component\Validator\Constraints as C;
 
 class DocumentType extends AbstractType
 {
+    /**
+     * @var array
+     */
+    private $config;
+
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -58,7 +68,7 @@ class DocumentType extends AbstractType
                 $obj->setMimeType($file->getMimeType());
                 $obj->setExtension($file->getClientOriginalExtension());
 
-                if($obj->getTitle() === null) {
+                if ($obj->getTitle() === null) {
                     $obj->setTitle($file->getClientOriginalName());
                 }
 
@@ -73,9 +83,14 @@ class DocumentType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Document::class,
-            'target_directory' => '/home/siciarek/Workspace/symfony-common-bundle/app/data',
-        ]);
+        if (false === (isset($this->config['target_directory'])
+                and is_dir($this->config['target_directory'])
+                and is_writable($this->config['target_directory']))) {
+            throw new \Exception('Invalid document target directory.');
+        }
+
+        $defaults = array_merge(['data_class' => Document::class], $this->config);
+
+        $resolver->setDefaults($defaults);
     }
 }

@@ -2,21 +2,23 @@
 
 namespace AppBundle\Controller;
 
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * Class CommonController
+ * @package AppBundle\Controller
+ */
 abstract class CommonController extends Controller
 {
-    const SYSTEM_USER_ID = 1;
-
     const MESSAGE_ERROR = 'error';
     const MESSAGE_WARNING = 'warning';
     const MESSAGE_INFO = 'info';
     const MESSAGE_SUCCESS = 'success';
 
+    /**
+     * @var array list of custom Exception classnames, to propagate their messages in prod environment.
+     */
     static $customExceptions = [];
 
     /**
@@ -98,9 +100,10 @@ abstract class CommonController extends Controller
     }
 
     /**
-     * Handle json action
+     * Handle json action with callable.
      *
      * @param callable $run callable
+     * @return Response
      */
     protected function handleJsonAction($run)
     {
@@ -131,9 +134,11 @@ abstract class CommonController extends Controller
     }
 
     /**
-     * Handle html action
+     * Handle html action with callable
      *
      * @param callable $run callable
+     * @param null|string $successMessage if != null flash success message is created.
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     protected function handleHtmlAction($run, $successMessage = null)
     {

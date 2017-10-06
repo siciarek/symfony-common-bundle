@@ -20,6 +20,7 @@ class Document
     const TYPE_REFERENCE = 'reference';
 
     const DEFAULT_TYPE = self::TYPE_FILE;
+//    const DEFAULT_TYPE = self::TYPE_REFERENCE;
     const DEFAULT_MIME_TYPE = 'application/octet-stream';
 
     const AVAILABLE_TYPES = [
@@ -75,9 +76,9 @@ class Document
     private $title;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $size = 0;
+    private $size;
 
     /**
      * @ORM\Column(nullable=true)
@@ -151,6 +152,30 @@ class Document
     public function getMain()
     {
         return $this->main;
+    }
+
+    /**
+     * Set reference
+     *
+     * @param string $reference
+     *
+     * @return Document
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
     }
 
     /**

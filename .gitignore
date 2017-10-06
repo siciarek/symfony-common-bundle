@@ -14,7 +14,6 @@
 /app/
 /var/
 /web/
-/data/
-/Controller
 /Resources/views/Default/
 !/Resources/views/form/fields.html.twig
+/Controller/DefaultController.php

@@ -2,6 +2,6 @@
 
 twig:
     paths:
-        'Resources/views/form': SiciarekSymfonyCommonBundle:form
+        'Resources/views/Form': SiciarekSymfonyCommonBundle:Form
     form_themes:
-        - '@SiciarekSymfonyCommonBundle:form/fields.html.twig'
+        - '@SiciarekSymfonyCommonBundle:Form/fields.html.twig'

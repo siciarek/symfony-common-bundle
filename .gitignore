@@ -15,5 +15,6 @@
 /var/
 /web/
 /Resources/views/Default/
-!/Resources/views/form/fields.html.twig
+!/Resources/views/Form/fields.html.twig
 /Controller/DefaultController.php
+/Form/DummyType.php

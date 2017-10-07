@@ -1,17 +1,16 @@
-{% use "@SiciarekSymfonyCommonBundle:Form/form_div_layout.html.twig" %}
+{% use "form_div_layout.html.twig" %}
 
 {# Widgets #}
 
 {% block form_widget_simple -%}
     {% if type is not defined or type not in ['file', 'hidden'] %}
-        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input')|trim}) -%}
+        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) -%}
     {% endif %}
-
     {{- parent() -}}
 {%- endblock form_widget_simple %}
 
 {% block textarea_widget -%}
-    {% set attr = attr|merge({class: (attr.class|default('') ~ ' textarea')|trim}) %}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) %}
     {{- parent() -}}
 {%- endblock textarea_widget %}
 
@@ -62,11 +61,11 @@
         {% if datetime is not defined or not datetime -%}
             <div {{ block('widget_container_attributes') -}}>
         {%- endif %}
-        {{- date_pattern|replace({
-            '{{ year }}': form_widget(form.year),
-            '{{ month }}': form_widget(form.month),
-            '{{ day }}': form_widget(form.day),
-        })|raw -}}
+            {{- date_pattern|replace({
+                '{{ year }}': form_widget(form.year),
+                '{{ month }}': form_widget(form.month),
+                '{{ day }}': form_widget(form.day),
+            })|raw -}}
         {% if datetime is not defined or not datetime -%}
             </div>
         {%- endif -%}
@@ -99,38 +98,24 @@
                 <table class="table {{ table_class|default('table-bordered table-condensed table-striped') }}">
                     <thead>
                     <tr>
-                        {%- if with_years %}
-                            <th>{{ form_label(form.years) }}</th>{% endif -%}
-                        {%- if with_months %}
-                            <th>{{ form_label(form.months) }}</th>{% endif -%}
-                        {%- if with_weeks %}
-                            <th>{{ form_label(form.weeks) }}</th>{% endif -%}
-                        {%- if with_days %}
-                            <th>{{ form_label(form.days) }}</th>{% endif -%}
-                        {%- if with_hours %}
-                            <th>{{ form_label(form.hours) }}</th>{% endif -%}
-                        {%- if with_minutes %}
-                            <th>{{ form_label(form.minutes) }}</th>{% endif -%}
-                        {%- if with_seconds %}
-                            <th>{{ form_label(form.seconds) }}</th>{% endif -%}
+                        {%- if with_years %}<th>{{ form_label(form.years) }}</th>{% endif -%}
+                        {%- if with_months %}<th>{{ form_label(form.months) }}</th>{% endif -%}
+                        {%- if with_weeks %}<th>{{ form_label(form.weeks) }}</th>{% endif -%}
+                        {%- if with_days %}<th>{{ form_label(form.days) }}</th>{% endif -%}
+                        {%- if with_hours %}<th>{{ form_label(form.hours) }}</th>{% endif -%}
+                        {%- if with_minutes %}<th>{{ form_label(form.minutes) }}</th>{% endif -%}
+                        {%- if with_seconds %}<th>{{ form_label(form.seconds) }}</th>{% endif -%}
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        {%- if with_years %}
-                            <td>{{ form_widget(form.years) }}</td>{% endif -%}
-                        {%- if with_months %}
-                            <td>{{ form_widget(form.months) }}</td>{% endif -%}
-                        {%- if with_weeks %}
-                            <td>{{ form_widget(form.weeks) }}</td>{% endif -%}
-                        {%- if with_days %}
-                            <td>{{ form_widget(form.days) }}</td>{% endif -%}
-                        {%- if with_hours %}
-                            <td>{{ form_widget(form.hours) }}</td>{% endif -%}
-                        {%- if with_minutes %}
-                            <td>{{ form_widget(form.minutes) }}</td>{% endif -%}
-                        {%- if with_seconds %}
-                            <td>{{ form_widget(form.seconds) }}</td>{% endif -%}
+                        {%- if with_years %}<td>{{ form_widget(form.years) }}</td>{% endif -%}
+                        {%- if with_months %}<td>{{ form_widget(form.months) }}</td>{% endif -%}
+                        {%- if with_weeks %}<td>{{ form_widget(form.weeks) }}</td>{% endif -%}
+                        {%- if with_days %}<td>{{ form_widget(form.days) }}</td>{% endif -%}
+                        {%- if with_hours %}<td>{{ form_widget(form.hours) }}</td>{% endif -%}
+                        {%- if with_minutes %}<td>{{ form_widget(form.minutes) }}</td>{% endif -%}
+                        {%- if with_seconds %}<td>{{ form_widget(form.seconds) }}</td>{% endif -%}
                     </tr>
                     </tbody>
                 </table>
@@ -141,12 +126,8 @@
 {%- endblock dateinterval_widget -%}
 
 {% block choice_widget_collapsed -%}
-    {% set attr = attr|merge({class: (attr.class|default('') ~ ' ')|trim}) %}
-    <div class="control">
-        <div class="select">
-            {{- parent() -}}
-        </div>
-    </div>
+    {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) %}
+    {{- parent() -}}
 {%- endblock %}
 
 {% block choice_widget_expanded -%}
@@ -194,7 +175,7 @@
 {# Labels #}
 
 {% block form_label -%}
-    {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' label')|trim}) -%}
+    {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' control-label')|trim}) -%}
     {{- parent() -}}
 {%- endblock form_label %}
 
@@ -224,15 +205,15 @@
         {% if label is not same as(false) and label is empty %}
             {%- if label_format is not empty -%}
                 {% set label = label_format|replace({
-                '%name%': name,
-                '%id%': id,
+                    '%name%': name,
+                    '%id%': id,
                 }) %}
             {%- else -%}
                 {% set label = name|humanize %}
             {%- endif -%}
         {% endif %}
         <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-        {{- widget|raw }} {{ label is not same as(false) ? (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) -}}
+            {{- widget|raw }} {{ label is not same as(false) ? (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) -}}
         </label>
     {% endif %}
 {% endblock checkbox_radio_label %}
@@ -240,40 +221,15 @@
 {# Rows #}
 
 {% block form_row -%}
-    {% set cls = (not compound or force_error|default(false)) and not valid ? 'is-danger' : '' %}
-
-    {% if(form.vars.block_prefixes[1] is defined and form.vars.block_prefixes[1] == 'file') %}
-        <div class="field">
-            {{- form_label(form) -}}
-
-            <div class="file has-name">
-                <label for="{{ form.vars.id }}" class="file-label">
-
-                <span class="file-cta">
-                    <span class="file-icon">
-                        <i class="fa fa-upload"></i>
-                    </span>
-                    <span class="file-label">Choose a file…</span>
-                </span>
-
-                    <span class="file-name">no file is selected.</span>
-
-                </label>
-                {{ form_widget(form, {class: cls, attr: {style: 'font-size:0;opacity:0'}}) }}
-            </div>
-            {{- form_errors(form) -}}
-        </div>
-    {% else %}
-        <div class="field">
-            {{- form_label(form) -}}
-            {{- form_widget(form, {attr: {class: cls}}) -}}
-            {{- form_errors(form) -}}
-        </div>
-    {% endif %}
+    <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_errors(form) -}}
+    </div>
 {%- endblock form_row %}
 
 {% block button_row -%}
-    <div class="field">
+    <div class="form-group">
         {{- form_widget(form) -}}
     </div>
 {%- endblock button_row %}
@@ -316,12 +272,12 @@
 
 {% block form_errors -%}
     {% if errors|length > 0 -%}
-        {% if form.parent %}<span class="help is-danger">{% else %}<div class="alert alert-danger">{% endif %}
-        <ul class="list-unstyled">
+    {% if form.parent %}<span class="help-block">{% else %}<div class="alert alert-danger">{% endif %}
+    <ul class="list-unstyled">
         {%- for error in errors -%}
             <li><span class="glyphicon glyphicon-exclamation-sign"></span> {{ error.message }}</li>
         {%- endfor -%}
     </ul>
-        {% if form.parent %}</span>{% else %}</div>{% endif %}
+    {% if form.parent %}</span>{% else %}</div>{% endif %}
     {%- endif %}
 {%- endblock form_errors %}

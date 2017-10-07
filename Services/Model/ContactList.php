@@ -45,21 +45,21 @@ class ContactList
     public function validateAndSanitize($type, $value, $strict = true)
     {
         switch ($type) {
-            case E\ContactListEntry::TYPE_EMAIL:
-                $val = $this->filter->sanitize($value, [FilterInterface::EMAIL], $strict);
+            case E\ContactListEntry::TYPE_EMAIL_ADDRESS:
+                $val = $this->filter->sanitize($value, [FilterInterface::EMAIL_ADDRESS], $strict);
                 if (null === $val) {
                     throw new Exceptions\ContactListEntry('Invalid email: '.$value);
                 }
                 $value = $val;
                 break;
-            case E\ContactListEntry::TYPE_PHONE:
+            case E\ContactListEntry::TYPE_PHONE_NUMBER:
                 $val = $this->filter->sanitize($value, [FilterInterface::PHONE_NUMBER], $strict);
                 if (null === $val) {
                     throw new Exceptions\ContactListEntry('Invalid phone number: '.$value);
                 }
                 $value = $val;
                 break;
-            case E\ContactListEntry::TYPE_FACEBOOK:
+            case E\ContactListEntry::TYPE_FACEBOOK_IDENTIFIER:
                 $val = $this->filter->sanitize($value, [FilterInterface::FACEBOOK_IDENTIFIER], $strict);
                 if (null === $val) {
                     throw new Exceptions\ContactListEntry('Invalid facebook identifier: '.$value);

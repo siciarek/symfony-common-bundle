@@ -5,6 +5,7 @@ namespace Siciarek\SymfonyCommonBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
+use Siciarek\SymfonyCommonBundle\Services\Utils\FilterInterface;
 
 /**
  * Siciarek\SymfonyCommonBundle\ContactList
@@ -15,15 +16,14 @@ use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
  */
 class ContactListEntry
 {
-
-    const TYPE_PHONE = 'phone';
-    const TYPE_EMAIL = 'email';
-    const TYPE_FACEBOOK = 'facebook';
+    const TYPE_PHONE_NUMBER = FilterInterface::PHONE_NUMBER;
+    const TYPE_EMAIL_ADDRESS = FilterInterface::EMAIL_ADDRESS;
+    const TYPE_FACEBOOK_IDENTIFIER = FilterInterface::FACEBOOK_IDENTIFIER;
 
     const AVAILABLE_TYPES = [
-        self::TYPE_PHONE,
-        self::TYPE_EMAIL,
-        self::TYPE_FACEBOOK,
+        self::TYPE_PHONE_NUMBER,
+        self::TYPE_EMAIL_ADDRESS,
+        self::TYPE_FACEBOOK_IDENTIFIER,
     ];
 
     use DBBehaviors\Descriptable\Descriptable,

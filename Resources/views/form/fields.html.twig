@@ -29,7 +29,7 @@
 
           document.addEventListener('DOMContentLoaded', function (event) {
             var storage = new MapStateStorage(callback, {{ selector }}_initialState);
-            map = new Map(storage, '{{ selector }}', false);
+            map = new Map(storage, '{{ selector }}', true);
           });
 
         </script>

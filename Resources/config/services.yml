@@ -1,12 +1,17 @@
 services:
 
+    Siciarek\SymfonyCommonBundle\Form\ContactListEntryType:
+        arguments:
+            - '@scb.utils_filter'
+        tags:
+            - { name: form.type }
+
     Siciarek\SymfonyCommonBundle\Form\DocumentType:
         arguments:
             -
                 target_directory: '%document_target_directory%'
         tags:
-            -
-                form.type
+            - { name: form.type }
 
     scb.utils_filter:
         class: Siciarek\SymfonyCommonBundle\Services\Utils\Filter
@@ -14,10 +19,10 @@ services:
             -
                 slug:
                     separator: '-'
-                email:
+                email address:
                     lowercase: true
-                phone_number:
-                    defaultRegion: 'PL'
+                phone number:
+                    defaultRegion: PL
                     numberFormat: !libphonenumber\PhoneNumberFormat::E164
 
     scb.net_url:

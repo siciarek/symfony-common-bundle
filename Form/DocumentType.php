@@ -40,6 +40,20 @@ class DocumentType extends AbstractType
                     new C\Choice(['choices' => Document::AVAILABLE_TYPES]),
                 ],
             ])
+            ->add('file', null, [
+                'required' => true,
+                'data_class' => null,
+                'constraints' => [
+                    new C\File(),
+                ],
+            ])
+            ->add('reference', null, [
+                'required' => true,
+                'trim' => true,
+                'constraints' => [
+                    new C\Length(['min' => 5, 'max' => 255]),
+                ],
+            ])
             ->add('title', null, [
                 'trim' => true,
                 'constraints' => [
@@ -96,7 +110,23 @@ class DocumentType extends AbstractType
             });
 
 
-        $adjustForm = function (FormInterface $form, $type) {
+        $adjustFormRemove = function (FormInterface $form, $type) {
+
+            switch ($type) {
+                case Document::TYPE_FILE:
+                    $form->remove('reference');
+                    break;
+
+                case Document::TYPE_REFERENCE:
+                    $form->remove('file');
+                    break;
+            }
+
+        };
+
+        $adjustFormAdd = function (FormInterface $form, $type) use ($adjustFormRemove) {
+
+            $adjustFormRemove($form, $type);
 
             switch ($type) {
                 case Document::TYPE_FILE:
@@ -123,6 +153,8 @@ class DocumentType extends AbstractType
             }
 
         };
+
+        $adjustForm = $adjustFormAdd;
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,

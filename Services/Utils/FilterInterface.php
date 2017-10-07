@@ -13,8 +13,8 @@ interface FilterInterface
 {
     const ALPHANUM = 'alphanum';
     const ASCII = 'ascii';
-    const EMAIL = 'email';
-    const FACEBOOK_IDENTIFIER = 'facebook_identifier';
+    const EMAIL_ADDRESS = 'email address';
+    const FACEBOOK_IDENTIFIER = 'facebook identifier';
     const FLOAT = 'float';
     const INT = 'int';
     const IP4 = 'ip4';
@@ -23,7 +23,7 @@ interface FilterInterface
     const NORMALIZE = 'normalize';
     const NOSPACE = 'nospace';
     const NULL = 'null';
-    const PHONE_NUMBER = 'phone_number';
+    const PHONE_NUMBER = 'phone number';
     const SLUG = 'slug';
     const STRING = 'string';
     const TRIM = 'trim';
@@ -32,7 +32,7 @@ interface FilterInterface
     const FILTERS = [
         self::ALPHANUM,
         self::ASCII,
-        self::EMAIL,
+        self::EMAIL_ADDRESS,
         self::FACEBOOK_IDENTIFIER,
         self::FLOAT,
         self::INT,

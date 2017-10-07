@@ -26,12 +26,11 @@ class Filter implements FilterInterface
      */
     public function __construct(array $options = [])
     {
-
         $defaults = [
             self::SLUG => [
                 'separator' => '-',
             ],
-            self::EMAIL => [
+            self::EMAIL_ADDRESS => [
                 'lowercase' => true,
             ],
             self::PHONE_NUMBER => [
@@ -87,7 +86,7 @@ class Filter implements FilterInterface
 
         switch ($filter) {
             case self::SLUG:
-                $options = $this->options[$filter];
+                $options = $this->options[self::SLUG];
 
                 $value = $this->sanitize($value, [self::NORMALIZE, self::ASCII, self::LOWER]);
                 $value = preg_replace('/\s+/', $options['separator'], $value);
@@ -209,7 +208,7 @@ class Filter implements FilterInterface
 
             case self::PHONE_NUMBER:
 
-                $options = $this->options[$filter];
+                $options = $this->options[self::PHONE_NUMBER];
 
                 $value = trim($value);
                 $prefix = mb_substr($value, 0, 1);
@@ -239,8 +238,8 @@ class Filter implements FilterInterface
 
                 return $value;
 
-            case self::EMAIL:
-                $options = $this->options[$filter];
+            case self::EMAIL_ADDRESS:
+                $options = $this->options[self::EMAIL_ADDRESS];
 
                 $value = filter_var($value, FILTER_SANITIZE_EMAIL);
 

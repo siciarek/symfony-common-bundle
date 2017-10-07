@@ -134,18 +134,18 @@ TXT;
             [Filter::PHONE_NUMBER, '+4860317', null, true],
 
             # Valid:
-            [Filter::EMAIL, '    SiCiareK@gmail.com       ', 'siciarek@gmail.com', true],
-            [Filter::EMAIL, '    siciarek@gmail.com       ', 'siciarek@gmail.com', true],
-            [Filter::EMAIL, '    sici arek@gmail.com       ', 'siciarek@gmail.com', true],
-            [Filter::EMAIL, '    sici arek@gm a i l.com       ', 'siciarek@gmail.com', true],
-            [Filter::EMAIL, 'siciarek@gmail.com', 'siciarek@gmail.com', true],
-            [Filter::EMAIL, 'sici@arek@gmail.com', null, true],
+            [Filter::EMAIL_ADDRESS, '    SiCiareK@gmail.com       ', 'siciarek@gmail.com', true],
+            [Filter::EMAIL_ADDRESS, '    siciarek@gmail.com       ', 'siciarek@gmail.com', true],
+            [Filter::EMAIL_ADDRESS, '    sici arek@gmail.com       ', 'siciarek@gmail.com', true],
+            [Filter::EMAIL_ADDRESS, '    sici arek@gm a i l.com       ', 'siciarek@gmail.com', true],
+            [Filter::EMAIL_ADDRESS, 'siciarek@gmail.com', 'siciarek@gmail.com', true],
+            [Filter::EMAIL_ADDRESS, 'sici@arek@gmail.com', null, true],
 
             # Invalid:
-            [Filter::EMAIL, 'siciarek2gmail.com', null, true],
-            [Filter::EMAIL, 'siciarek#gmail.com', null, true],
-            [Filter::EMAIL, 'siciarek@sqlmkalkdo.com', null, true],
-            [Filter::EMAIL, 'siciarek@m.com', null, true],
+            [Filter::EMAIL_ADDRESS, 'siciarek2gmail.com', null, true],
+            [Filter::EMAIL_ADDRESS, 'siciarek#gmail.com', null, true],
+            [Filter::EMAIL_ADDRESS, 'siciarek@sqlmkalkdo.com', null, true],
+            [Filter::EMAIL_ADDRESS, 'siciarek@m.com', null, true],
 
             [Filter::NOSPACE, '        Zażółć gęślą jąźń           !           ', 'Zażółćgęśląjąźń!', true],
 
@@ -190,8 +190,6 @@ TXT;
      */
     public function testSanitizeOk($filter, $value, $expected, $strict)
     {
-        $this->srv = new Filter();
-
         $actual = $this->srv->sanitize($value, $filter, $strict);
 
         if ($expected !== $actual) {

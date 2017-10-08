@@ -57,6 +57,12 @@ class ContactListEntry
     private $valid = true;
 
     /**
+     * @ORM\Column(type="boolean")
+     * @var boolean
+     */
+    private $allowedToPublish = false;
+
+    /**
      * @ORM\Column()
      * @var string
      */
@@ -153,6 +159,30 @@ class ContactListEntry
     public function isValid()
     {
         return $this->valid;
+    }
+
+    /**
+     * Set allowed to publish
+     *
+     * @param boolean $allowedToPublish
+     *
+     * @return ContactListEntry
+     */
+    public function setAllowedToPublish($allowedToPublish)
+    {
+        $this->allowedToPublish = $allowedToPublish;
+
+        return $this;
+    }
+
+    /**
+     * Get allowed to publish
+     *
+     * @return boolean
+     */
+    public function isAllowedToPublish()
+    {
+        return $this->allowedToPublish;
     }
 
     /**

@@ -141,9 +141,10 @@
 {%- endblock dateinterval_widget -%}
 
 {% block choice_widget_collapsed -%}
+    {% set cls = (not compound or force_error|default(false)) and not valid ? ' is-danger' : '' %}
     {% set attr = attr|merge({class: (attr.class|default('') ~ ' ')|trim}) %}
     <div class="control">
-        <div class="select">
+        <div class="select{{ cls }}">
             {{- parent() -}}
         </div>
     </div>
@@ -249,12 +250,12 @@
             <div class="file has-name">
                 <label for="{{ form.vars.id }}" class="file-label">
 
-                <span class="file-cta">
-                    <span class="file-icon">
-                        <i class="fa fa-upload"></i>
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fa fa-upload"></i>
+                        </span>
+                        <span class="file-label">Choose a file…</span>
                     </span>
-                    <span class="file-label">Choose a file…</span>
-                </span>
 
                     <span class="file-name">no file is selected.</span>
 

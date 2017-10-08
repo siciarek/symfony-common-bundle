@@ -69,6 +69,11 @@ class ContactListEntryType extends AbstractType
                     new C\Length(['min' => 1, 'max' => 255]),
                 ],
             ])
+            ->add('allowedToPublish', null, [
+                'constraints' => [
+                    new C\Choice(['choices' => [true, false]]),
+                ],
+            ])
             ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($options) {
 
                 /**

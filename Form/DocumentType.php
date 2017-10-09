@@ -157,4 +157,9 @@ class DocumentType extends AbstractType
 
         $resolver->setDefaults($defaults);
     }
+
+    public function getBlockPrefix()
+    {
+        return null;
+    }
 }

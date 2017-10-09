@@ -113,4 +113,9 @@ class AddressType extends AbstractType
             ],
         ]);
     }
+
+    public function getBlockPrefix()
+    {
+        return null;
+    }
 }

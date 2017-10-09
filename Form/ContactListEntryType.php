@@ -105,4 +105,9 @@ class ContactListEntryType extends AbstractType
             'data_class' => ContactListEntry::class,
         ]);
     }
+
+    public function getBlockPrefix()
+    {
+        return null;
+    }
 }

@@ -18,3 +18,4 @@
 !/Resources/views/Form/fields.html.twig
 /Controller/DefaultController.php
 /Form/DummyType.php
+/Form/DummyCategoryType.php

@@ -1,0 +1,37 @@
+.form-inline .control {
+    display: inline-block!important;
+}
+
+.form-inline * {
+    vertical-align: middle;
+}
+
+.form-inline .control:nth-child(3) {
+    margin-right: .8em;
+}
+
+.radio+.radio,
+.checkbox+.checkbox {
+    margin-left: 0;
+}
+
+.radio, .checkbox {
+    margin-right: 1.4em;
+    margin-bottom: .6em;
+}
+
+.radio input,
+.checkbox input {
+    margin-right: .4em;
+    zoom: 1.4;
+    transform: scale(1.4);
+    -ms-transform: scale(1.4);
+    -webkit-transform: scale(1.4);
+    -o-transform: scale(1.4);
+    -moz-transform: scale(1.4);
+    transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+}

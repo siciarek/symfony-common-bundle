@@ -8,8 +8,10 @@
 
 namespace Siciarek\SymfonyCommonBundle\Tests\Services\Utils;
 
+use Siciarek\SymfonyCommonBundle\Services\Utils\FilterInterface;
 use Siciarek\SymfonyCommonBundle\Tests\TestCase;
 use Siciarek\SymfonyCommonBundle\Services\Utils\Filter;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Twig\Node\Expression\FilterExpression;
 
 /**
@@ -173,9 +175,11 @@ TXT;
             [Filter::ALPHANUM, 'zażółć gęślą jaźń 4', 'zaglja4', true],
 
             [Filter::IP4, '127.0.0.1', '127.0.0.1', true],
+            [Filter::IP4, '             127.0.0.1             ', '127.0.0.1', true],
             [Filter::IP4, '327.0.0.1', null, true],
 
             [Filter::IP6, '2001:db8:a0b:12f0::1', '2001:db8:a0b:12f0::1', true],
+            [Filter::IP6, '               2001:db8:a0b:12f0::1                ', '2001:db8:a0b:12f0::1', true],
             [Filter::IP6, '32001:db8:a0b:12f0::1', null, true],
 
         ];
@@ -198,6 +202,21 @@ TXT;
         }
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testSanitizeNull()
+    {
+        $value = null;
+
+        foreach(FilterInterface::FILTERS as $filter) {
+            $actual = $this->srv->sanitize($value, $filter, true);
+            $this->assertNull($actual);
+        }
+
+        foreach(FilterInterface::FILTERS as $filter) {
+            $actual = $this->srv->sanitize($value, $filter, false);
+            $this->assertNull($actual);
+        }
     }
 
     /**

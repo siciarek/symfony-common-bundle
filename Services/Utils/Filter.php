@@ -6,6 +6,7 @@ use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validation;
+use Symfony\Component\Form\Util\StringUtil;
 
 /**
  * Filter service
@@ -150,27 +151,27 @@ class Filter implements FilterInterface
                 break;
 
             case self::TRIM:
-                $value = trim($value);
+                $value = StringUtil::trim($value);
 
                 return $value;
 
             case self::NULL:
-                $value = trim($value);
+                $value = $this->sanitize($value, [self::TRIM]);
                 $value = strlen($value) === 0 ? null : $value;
 
                 return $value;
 
             case self::NORMALIZE:
+                # Remove nonbreaking space chars.
                 $value = str_replace('\xc2\xa0', ' ', $value);
-                $value = trim($value);
-                $value = preg_replace('/\s+/', ' ', $value);
-
+                $value = $this->sanitize($value, [self::NULL]);
+                if($value !== null) {
+                    $value = preg_replace('/\s+/', ' ', $value);
+                }
                 return $value;
 
             case self::INT:
-                $value = str_replace('\xc2\xa0', '', $value);
-                $value = $this->sanitize($value, [self::TRIM, self::NULL]);
-                $value = preg_replace('/\s+/', '', $value);
+                $value = $this->sanitize($value, [self::NOSPACE]);
 
                 if ($value !== null) {
                     $value = intval($value);
@@ -179,8 +180,7 @@ class Filter implements FilterInterface
                 return $value;
 
             case self::FLOAT:
-                $value = $this->sanitize($value, [self::NORMALIZE]);
-                $value = preg_replace('/\s+/', '', $value);
+                $value = $this->sanitize($value, [self::NOSPACE]);
 
                 if ($value !== null) {
                     $value = floatval($value);
@@ -189,28 +189,35 @@ class Filter implements FilterInterface
                 return $value;
 
             case self::IP4:
-                $value = trim($value);
+                $value = $this->sanitize($value, [self::NOSPACE]);
                 $value = filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 
                 return $value;
 
             case self::IP6:
-                $value = trim($value);
+                $value = $this->sanitize($value, [self::NOSPACE]);
                 $value = filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
 
                 return $value;
 
             case self::NOSPACE:
-                $value = str_replace('\xc2\xa0', ' ', $value);
+                $value = $this->sanitize($value, [self::NORMALIZE]);
+                if($value === null) {
+                    return null;
+                }
                 $value = preg_replace('/\s+/', '', $value);
-
                 return $value;
 
             case self::PHONE_NUMBER:
 
                 $options = $this->options[self::PHONE_NUMBER];
 
-                $value = trim($value);
+                $value = $this->sanitize($value, [self::NULL]);
+
+                if($value === null) {
+                    return null;
+                }
+
                 $prefix = mb_substr($value, 0, 1);
 
                 # 048603173114

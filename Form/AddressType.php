@@ -64,6 +64,7 @@ class AddressType extends AbstractType
             ->add('data', LocationType::class, [
                 'label' => 'Location',
                 'required' => false,
+                'compound' => false,
                 'empty_data' => $options['locationInitConfig'],
                 'attr' => [
                       'data-content' => json_encode($options['locationInitConfig']),

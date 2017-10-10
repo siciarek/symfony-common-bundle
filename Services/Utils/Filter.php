@@ -86,6 +86,18 @@ class Filter implements FilterInterface
         }
 
         switch ($filter) {
+            case self::BOOLEAN:
+                if($strict === true) {
+                    if($value !== true and $value !== false) {
+                        return null;
+                    }
+
+                    return $value;
+                }
+
+                $value = $value == true;
+                return $value;
+
             case self::SLUG:
                 $options = $this->options[self::SLUG];
 

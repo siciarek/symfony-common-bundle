@@ -13,6 +13,7 @@ interface FilterInterface
 {
     const ALPHANUM = 'alphanum';
     const ASCII = 'ascii';
+    const BOOLEAN = 'boolean';
     const EMAIL_ADDRESS = 'email address';
     const FACEBOOK_IDENTIFIER = 'facebook identifier';
     const FLOAT = 'float';
@@ -32,6 +33,7 @@ interface FilterInterface
     const FILTERS = [
         self::ALPHANUM,
         self::ASCII,
+        self::BOOLEAN,
         self::EMAIL_ADDRESS,
         self::FACEBOOK_IDENTIFIER,
         self::FLOAT,

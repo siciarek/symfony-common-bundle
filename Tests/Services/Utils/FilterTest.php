@@ -86,6 +86,18 @@ TXT;
 
 
         return [
+            [Filter::BOOLEAN, true, true, true],
+            [Filter::BOOLEAN, false, false, true],
+            [Filter::BOOLEAN, true, true, false],
+            [Filter::BOOLEAN, false, false, false],
+
+            [Filter::BOOLEAN, 1, true, false],
+            [Filter::BOOLEAN, 1, null, true],
+            [Filter::BOOLEAN, 0, false, false],
+            [Filter::BOOLEAN, 0, null, true],
+            [Filter::BOOLEAN, null, false, false],
+            [Filter::BOOLEAN, null, null, true],
+
 
             [Filter::SLUG, 'cv.programmer.en.odt', 'cv.programmer.en.odt', true],
             [Filter::SLUG, null, null, true],
@@ -150,6 +162,8 @@ TXT;
             [Filter::EMAIL_ADDRESS, 'siciarek@m.com', null, true],
 
             [Filter::NOSPACE, '        Zażółć gęślą jąźń           !           ', 'Zażółćgęśląjąźń!', true],
+            [Filter::NOSPACE, null, null, true],
+            [Filter::NOSPACE, '                ', null, true],
 
             [Filter::STRING, '<p>Zażółć <strong>gęślą</strong> jaźń!</p>', 'Zażółć gęślą jaźń!', true],
 

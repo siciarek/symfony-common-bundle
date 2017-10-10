@@ -31,6 +31,12 @@ services:
     scb.net_curl:
         class: Siciarek\SymfonyCommonBundle\Services\Net\Curl
 
+    scb.model_parameter_index:
+        class: Siciarek\SymfonyCommonBundle\Services\Model\ParameterIndex
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@scb.utils_filter'
+
     scb.model_contact_list:
         class: Siciarek\SymfonyCommonBundle\Services\Model\ContactList
         arguments:

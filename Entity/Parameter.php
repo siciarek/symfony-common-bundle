@@ -43,6 +43,8 @@ class Parameter
     const DEFAULT_TYPE = self::TYPE_DEFAULT;
     const DEFAULT_VALUE_TYPE = self::VALUE_TYPE_STRING;
 
+    const VALUE_BOOLEAN_TRUE = 'true';
+    const VALUE_BOOLEAN_FALSE = 'false';
 
     use DBBehaviors\Descriptable\Descriptable,
         ORMBehaviors\Blameable\Blameable,

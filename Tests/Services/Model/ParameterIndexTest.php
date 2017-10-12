@@ -8,7 +8,6 @@
 
 namespace Siciarek\SymfonyCommonBundle\Tests\Services\Model;
 
-use Doctrine\ORM\PersistentCollection;
 use Siciarek\SymfonyCommonBundle\Entity as E;
 use Siciarek\SymfonyCommonBundle\Model\Parametrizable\ParametrizableInterface;
 use Siciarek\SymfonyCommonBundle\Services\Model\Exceptions;
@@ -29,6 +28,7 @@ class ParameterIndexTest extends TestCase
      * @var ParameterIndex
      */
     protected $srv;
+
     public static function addNotOkProvider()
     {
         $owner = new DummyParametrizable();
@@ -104,7 +104,6 @@ class ParameterIndexTest extends TestCase
      */
     public function testAddOk(ParametrizableInterface $owner, $name, $value, $category, $valueType, $options, $count)
     {
-
         if ($owner->getParameterIndex() === null) {
             $em = $this->getContainer()->get('doctrine.orm.entity_manager');
             $em->persist($owner);
@@ -119,19 +118,71 @@ class ParameterIndexTest extends TestCase
 
         $this->assertInstanceOf(E\ParameterIndex::class, $parameterIndex);
         $this->assertEquals($count, $parameterIndex->getParameters()->count());
+
+        return $owner;
     }
 
+    /**
+     * @dataProvider addOkProvider
+     */
+    public function testGetValueOk(
+        ParametrizableInterface $owner,
+        $name,
+        $value,
+        $category,
+        $valueType,
+        $options,
+        $count
+    ) {
+        if ($owner->getParameterIndex() === null) {
+            $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+            $em->persist($owner);
+            $em->flush();
+        }
+
+        $actual = $this->srv->add($owner, $name, $value, $category, $valueType, $options);
+
+        $this->assertTrue($actual);
+
+        $expected = $value;
+
+        $actual = $this->srv->getValue($owner, $name);
+
+        $this->assertEquals($expected, $actual);
+
+        return $owner;
+    }
+
+    /**
+     * @expectedException \Siciarek\SymfonyCommonBundle\Services\Model\Exceptions\Parameter
+     * @expectedExceptionMessage No such parameter: dummy.nonexistent.param
+     */
+    public function testGetValueNotOk()
+    {
+        $temp = $this->getContainer()->get('doctrine.orm.entity_manager')
+            ->getRepository(DummyParametrizable::class)
+            ->findAll();
+        $owner = end($temp);
+
+        $this->srv->getValue($owner, 'dummy.nonexistent.param');
+    }
 
     /**
      * @dataProvider addNotOkProvider
      */
-    public function testAddNotOk(ParametrizableInterface $owner, $name, $value, $category, $valueType, $options, $exceptionMessage)
-    {
+    public function testAddNotOk(
+        ParametrizableInterface $owner,
+        $name,
+        $value,
+        $category,
+        $valueType,
+        $options,
+        $exceptionMessage
+    ) {
         try {
             $this->srv->add($owner, $name, $value, $category, $valueType, $options);
             $this->fail('Exception should be thrown.');
-        }
-        catch(Exceptions\Parameter $exception) {
+        } catch (Exceptions\Parameter $exception) {
             $this->assertEquals($exceptionMessage, $exception->getMessage());
         }
     }

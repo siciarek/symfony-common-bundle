@@ -36,6 +36,38 @@ class ParameterIndex
     }
 
     /**
+     * Returns of the owners prarameter recognized by $name
+     *
+     * @param ParametrizableInterface $owner
+     * @param string $name
+     */
+    public function getValue(ParametrizableInterface $owner, $name) {
+        $temp = $this->getAll($owner)->filter(function(E\Parameter $parameter) use ($name) {
+             return $parameter->getName() === $name;
+        });
+
+        if($temp->count() === 0) {
+            throw new Exceptions\Parameter('No such parameter: ' . $name);
+        }
+
+        /**
+         * @var E\Parameter $parameter
+         */
+        $parameter = $temp->last();
+
+        return json_decode($parameter->getValue());
+    }
+
+    /**
+     * Returns all the prarameters of given owner.
+     *
+     * @param ParametrizableInterface $owner
+     */
+    public function getAll(ParametrizableInterface $owner) {
+        return $owner->getParameterIndex()->getParameters();
+    }
+
+    /**
      * Adds address to owner's address book.
      *
      * @param ParametrizableInterface $owner
@@ -64,13 +96,6 @@ class ParameterIndex
         }
 
         $name = $this->filter->sanitize($name, [FilterInterface::NULL], true);
-
-        switch($valueType) {
-            case E\Parameter::VALUE_TYPE_BOOLEAN:
-                $value = $value === true;
-                $value = var_export(true, true);
-                break;
-        }
 
         $index = $owner->getParameterIndex();
 

@@ -15,10 +15,6 @@ use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
  */
 class DocumentFolder
 {
-    use DBBehaviors\Descriptable\Descriptable,
-        ORMBehaviors\Blameable\Blameable,
-        ORMBehaviors\Timestampable\Timestampable;
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

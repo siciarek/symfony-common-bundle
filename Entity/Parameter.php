@@ -25,8 +25,6 @@ class Parameter
         self::CATEGORY_COMMUNICATION,
     ];
 
-    const TYPE_DEFAULT = 'default';
-
     const VALUE_TYPE_STRING = 'string';
     const VALUE_TYPE_INTEGER = 'integer';
     const VALUE_TYPE_DECIMAL = 'decimal';
@@ -40,7 +38,6 @@ class Parameter
     ];
 
     const DEFAULT_CATEGORY = self::CATEGORY_GENERAL;
-    const DEFAULT_TYPE = self::TYPE_DEFAULT;
     const DEFAULT_VALUE_TYPE = self::VALUE_TYPE_STRING;
 
     const VALUE_BOOLEAN_TRUE = 'true';
@@ -87,12 +84,6 @@ class Parameter
      * @var string
      */
     private $category = self::DEFAULT_CATEGORY;
-
-    /**
-     * @ORM\Column()
-     * @var string
-     */
-    private $type = self::DEFAULT_TYPE;
 
     /**
      * @ORM\Column(nullable=true)
@@ -245,30 +236,6 @@ class Parameter
     public function getCategory()
     {
         return $this->category;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return Parameter
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**

@@ -9,8 +9,6 @@
 namespace Siciarek\SymfonyCommonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
 
 /**
  * Siciarek\SymfonyCommonBundle\ParameterIndex
@@ -21,23 +19,12 @@ use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
  */
 class ParameterIndex {
 
-    use DBBehaviors\Descriptable\Descriptable,
-        ORMBehaviors\Blameable\Blameable,
-        ORMBehaviors\Timestampable\Timestampable,
-        ORMBehaviors\SoftDeletable\SoftDeletable;
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @var boolean
-     */
-    private $enabled = true;
 
     /**
      * @ORM\OneToMany(targetEntity="Parameter", mappedBy="index", cascade={"persist"})

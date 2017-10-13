@@ -15,23 +15,12 @@ use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
  */
 class ContactList {
 
-    use DBBehaviors\Descriptable\Descriptable,
-        ORMBehaviors\Blameable\Blameable,
-        ORMBehaviors\Timestampable\Timestampable,
-        ORMBehaviors\SoftDeletable\SoftDeletable;
-
    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @var boolean
-     */
-    private $enabled = true;
 
     /**
      * @ORM\OneToMany(targetEntity="Siciarek\SymfonyCommonBundle\Entity\ContactListEntry", mappedBy="list")
@@ -54,30 +43,6 @@ class ContactList {
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     *
-     * @return ContactList
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * Get enabled
-     *
-     * @return boolean
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
     }
 
     /**

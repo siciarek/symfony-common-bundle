@@ -23,7 +23,7 @@ services:
                     lowercase: true
                 phone number:
                     defaultRegion: PL
-                    numberFormat: !libphonenumber\PhoneNumberFormat::E164
+                    numberFormat: '!libphonenumber\PhoneNumberFormat::E164'
 
     scb.net_url:
         class: Siciarek\SymfonyCommonBundle\Services\Net\Url

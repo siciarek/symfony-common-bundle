@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="scb_parameter_index")
- * @ORM\Entity(repositoryClass="ParameterIndex")
+ * @ORM\Entity(repositoryClass="ParameterIndexRepository")
  */
 class ParameterIndex {
 

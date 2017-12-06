@@ -35,6 +35,10 @@ class DocumentType extends AbstractType
             ? $container->getParameter('document_target_directory')
             : $container->get('kernel')->getProjectDir() . '/web/uploads';
 
+        if(false === is_dir($targetDirectory)) {
+            mkdir($targetDirectory, 0777, true);
+        }
+
         $this->config = [
             'target_directory' => $targetDirectory,
         ];

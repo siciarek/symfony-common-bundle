@@ -8,8 +8,7 @@ services:
 
     Siciarek\SymfonyCommonBundle\Form\DocumentType:
         arguments:
-            -
-                target_directory: '%document_target_directory%'
+            - '@service_container'
         tags:
             - { name: form.type }
 

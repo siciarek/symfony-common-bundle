@@ -2,6 +2,7 @@
 
 namespace Siciarek\SymfonyCommonBundle\Form;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Siciarek\SymfonyCommonBundle\Entity\Document;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,9 +25,19 @@ class DocumentType extends AbstractType
      */
     private $config;
 
-    public function __construct(array $config)
+    /**
+     * DocumentType constructor.
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
     {
-        $this->config = $config;
+        $targetDirectory = $container->hasParameter('document_target_directory')
+            ? $container->getParameter('document_target_directory')
+            : $container->get('kernel')->getProjectDir() . '/web/uploads';
+
+        $this->config = [
+            'target_directory' => $targetDirectory,
+        ];
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -144,6 +155,12 @@ class DocumentType extends AbstractType
         );
     }
 
+    /**
+     * Configure options.
+     *
+     * @param OptionsResolver $resolver
+     * @throws \Exception
+     */
     public function configureOptions(
         OptionsResolver $resolver
     ) {
@@ -158,6 +175,11 @@ class DocumentType extends AbstractType
         $resolver->setDefaults($defaults);
     }
 
+    /**
+     * Get block prefix.
+     *
+     * @return null|string
+     */
     public function getBlockPrefix()
     {
         return null;

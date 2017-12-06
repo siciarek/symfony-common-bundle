@@ -22,7 +22,7 @@ class Address
     const TYPE_INVOICE = 'invoice';
     const TYPE_DELIVERY = 'delivery';
 
-    const TYPE_DEFAULT = self::TYPE_CORRESPONDENCE;
+    const TYPE_DEFAULT = self::TYPE_GENERAL ;
 
     const AVAILABLE_TYPES = [
         self::TYPE_GENERAL,

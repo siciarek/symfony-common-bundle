@@ -19,11 +19,13 @@ class ContactListEntry
     const TYPE_PHONE_NUMBER = FilterInterface::PHONE_NUMBER;
     const TYPE_EMAIL_ADDRESS = FilterInterface::EMAIL_ADDRESS;
     const TYPE_FACEBOOK_IDENTIFIER = FilterInterface::FACEBOOK_IDENTIFIER;
+    const TYPE_WEBSITE = 'website';
 
     const AVAILABLE_TYPES = [
         self::TYPE_PHONE_NUMBER,
         self::TYPE_EMAIL_ADDRESS,
         self::TYPE_FACEBOOK_IDENTIFIER,
+        self::TYPE_WEBSITE,
     ];
 
     use DBBehaviors\Descriptable\Descriptable,

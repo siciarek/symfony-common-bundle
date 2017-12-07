@@ -15,7 +15,7 @@ use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
  */
 class Address
 {
-    const DEFAULT_COUNTRY = 'Polska';
+    const DEFAULT_COUNTRY = 'Poland';
 
     const TYPE_GENERAL = 'general';
     const TYPE_CORRESPONDENCE = 'correspondence';

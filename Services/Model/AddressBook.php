@@ -40,6 +40,7 @@ class AddressBook
      * @param AddressableInterface $owner
      * @param array $data address data
      * @return bool
+     * @throws Address
      */
     public function add(AddressableInterface $owner, array $data = [])
     {
@@ -52,8 +53,18 @@ class AddressBook
         if (false === $owner->getAddressBook() instanceof E\AddressBook) {
             $owner->setAddressBook(new E\AddressBook());
             $this->entityManager->persist($owner);
-            $this->entityManager->flush();
         }
+
+        $address = new E\Address();
+        $address->setBook($owner->getAddressBook());
+
+        foreach($data as $key => $value) {
+            $method = 'set' . ucfirst($key);
+            $address->$method($value);
+        }
+
+        $this->entityManager->persist($address);
+        $this->entityManager->flush();
 
         # Return success:
         return true;

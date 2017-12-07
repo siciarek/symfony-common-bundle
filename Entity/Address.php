@@ -92,7 +92,7 @@ class Address
     /**
      * @ORM\Column()
      */
-    private $country = const::DEFAULT_COUNTRY;
+    private $country = self::DEFAULT_COUNTRY;
 
     /**
      * Get id

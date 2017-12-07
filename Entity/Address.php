@@ -15,6 +15,8 @@ use Siciarek\SymfonyCommonBundle\Model as DBBehaviors;
  */
 class Address
 {
+    const DEFAULT_COUNTRY = 'Polska';
+
     const TYPE_GENERAL = 'general';
     const TYPE_CORRESPONDENCE = 'correspondence';
     const TYPE_LOCATION = 'location';
@@ -86,6 +88,11 @@ class Address
      * @ORM\Column()
      */
     private $place;
+
+    /**
+     * @ORM\Column()
+     */
+    private $country = const::DEFAULT_COUNTRY;
 
     /**
      * Get id
@@ -239,6 +246,30 @@ class Address
     public function getPlace()
     {
         return $this->place;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return Address
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 
     /**

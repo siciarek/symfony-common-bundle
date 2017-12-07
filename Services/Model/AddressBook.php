@@ -9,6 +9,7 @@
 namespace Siciarek\SymfonyCommonBundle\Services\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\DoctrineBehaviors\ORM\Geocodable\Type\Point;
 use Siciarek\SymfonyCommonBundle\Entity as E;
 use Siciarek\SymfonyCommonBundle\Model\Addressable\AddressableInterface;
 use Siciarek\SymfonyCommonBundle\Services\Model\Exceptions\Address;
@@ -59,6 +60,11 @@ class AddressBook
         $address->setBook($owner->getAddressBook());
 
         foreach($data as $key => $value) {
+
+            if($key === 'location') {
+                $value = new Point($value['latitude'], $value['longitude']);
+            }
+
             $method = 'set' . ucfirst($key);
             $address->$method($value);
         }

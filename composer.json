@@ -21,7 +21,7 @@
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
         "doctrine/orm": "^2.5",
-        "symfony/symfony": "3.3.*",
+        "symfony/symfony": "3.4.*",
         "sensio/framework-extra-bundle": "^3.0.2",
         "knplabs/doctrine-behaviors": "^1.4@dev",
         "egulias/email-validator": "^2.1",
